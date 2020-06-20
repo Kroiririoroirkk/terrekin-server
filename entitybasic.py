@@ -3,7 +3,7 @@ from collections import namedtuple
 from typing import Any, Dict
 import uuid
 
-from config import BLOCK_WIDTH
+from config import Config
 from geometry import BoundingBox, Direction, Vec
 from tilecoord import TileCoord
 
@@ -62,7 +62,7 @@ class Entity:
 
     def get_bounding_box(self):
         """Get the entity's bounding box."""
-        return self.get_bounding_box_of_width(BLOCK_WIDTH)
+        return self.get_bounding_box_of_width(Config.BLOCK_WIDTH)
 
     def get_bounding_box_of_width(self, width):
         """Get a bounding box at the current position with a custom width."""
@@ -94,9 +94,8 @@ class Entity:
     def from_json(entity_dict):
         """Convert a dict representing a JSON object into an entity."""
         entity_class = Entity.get_entity_by_id(entity_dict["entity_id"])
-        entity_pos = Vec(entity_dict["pos"]["x"], entity_dict["pos"]["y"])
-        entity_velocity = Vec(entity_dict["velocity"]["x"],
-                              entity_dict["velocity"]["y"])
+        entity_pos = Vec.from_json(entity_dict["pos"])
+        entity_velocity = Vec.from_json(entity_dict["velocity"])
         entity_facing = Direction.str_to_direction(entity_dict["facing"])
         ent = entity_class(entity_pos, entity_velocity, entity_facing)
         ent.uuid = uuid.UUID(entity_dict["uuid"])
@@ -114,8 +113,8 @@ class Entity:
         return {
             "uuid": self.uuid.hex,
             "entity_id": self.get_entity_id(),
-            "pos": {"x": self.pos.x, "y": self.pos.y},
-            "velocity": {"x": self.velocity.x, "y": self.velocity.y},
+            "pos": self.pos.to_json(),
+            "velocity": self.velocity.to_json(),
             "facing": self.facing.direction_to_str()
         }
 

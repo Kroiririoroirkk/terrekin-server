@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "tiles": [
     [
       {"tile_id": "empty"},
@@ -1461,5 +1461,6 @@
       "block_x": 22,
       "block_y": 7
     }
-  }
+  },
+  "cutscenes": []
 }

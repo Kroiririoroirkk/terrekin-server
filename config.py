@@ -1,20 +1,32 @@
-"""Port that the WebSocket server runs on."""
-WSPORT = 8080
+"""Various configuration values for the game.
 
-"""Width and height of one in-game block, in pixels."""
-BLOCK_WIDTH = 32
+WSPORT: Port that the WebSocket server runs on.
 
-"""Width and height of player, in pixels."""
-PLAYER_WIDTH = 28
+BLOCK_WIDTH: Width and height of one in-game block, in pixels.
 
-"""Speed of the player in pixels per second."""
-PLAYER_SPEED = BLOCK_WIDTH*3
+PLAYER_WIDTH: Width and height of player, in pixels.
 
-"""Fast moving speed = SPEED_MULTIPLIER * PLAYER_SPEED."""
-SPEED_MULTIPLIER = 2
+PLAYER_SPEED: Speed of the player in pixels per second.
 
-"""The maximum time between move messages to be considered a single move."""
-MAX_MOVE_DT = 0.1
+SPEED_MULTIPLIER: Ratio of fast-moving speed to regular speed.
 
-"""Minimum amount of seconds between entity-updating calls."""
-UPDATE_DT = 0.1
+MAX_MOVE_DT: The maximum time between move messages.
+If the amount of time between two move messages is
+greater than MAX_MOVE_DT, they are considered two separate
+moves. Otherwise, they are considered a single move.
+
+UPDATE_DT: Amount of seconds between entity-updating calls.
+This is a lower bound.
+"""
+
+
+class Config:
+    """Class that contains configuration values."""
+
+    WSPORT = 8080
+    BLOCK_WIDTH = 32
+    PLAYER_WIDTH = 28
+    PLAYER_SPEED = BLOCK_WIDTH*3
+    SPEED_MULTIPLIER = 2
+    MAX_MOVE_DT = 0.1
+    UPDATE_DT = 0.1

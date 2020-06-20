@@ -1,6 +1,7 @@
 """Defines the World class."""
 from typing import Dict
 
+from cutscene import Cutscene
 from entitybasic import Entity
 from tilebasic import Empty, Tile
 from tilecoord import TileCoord
@@ -15,11 +16,12 @@ class World:
     Different Worlds are linked together through portals.
     """
 
-    def __init__(self, tiles, entities, spawn_points):
+    def __init__(self, tiles, entities, spawn_points, cutscenes):
         """Initialize the World with its contents."""
         self.tiles = tiles
         self.entities = entities
         self.spawn_points = spawn_points
+        self.cutscenes = cutscenes
 
     def get_tile(self, tile_coord):
         """Get the tile positioned at the given TileCoord."""
@@ -40,7 +42,7 @@ class World:
     @staticmethod
     def from_json(world_dict):
         """Convert a dict representing a JSON object into a world."""
-        if world_dict["version"] != "0.1.0":
+        if world_dict["version"] != "0.2.0":
             raise ValueError
         tiles = []
         for row in world_dict["tiles"]:
@@ -59,7 +61,10 @@ class World:
             for spawn_id, spawn_tile_coord
             in world_dict["spawn_points"].items()}
 
-        return World(tiles, entities, spawn_points)
+        cutscenes = [
+            Cutscene.from_json(scene) for scene in world_dict["cutscenes"]]
+
+        return World(tiles, entities, spawn_points, cutscenes)
 
     def to_json_client(self, spawn_pos):
         """Convert a world to a dict which can be converted to a JSON string.
@@ -75,14 +80,17 @@ class World:
 
         entity_list = [entity.to_json(True) for entity in self.entities]
 
+        spawn_pos_obj = spawn_pos.to_json()
+
+        cutscene_list = [
+            cutscene.to_json(True) for cutscene in self.cutscenes]
+
         return {
-            "version": "0.1.0",
+            "version": "0.2.0",
             "tiles": tiles_list,
             "entities": entity_list,
-            "spawn_pos": {
-                "x": spawn_pos.x,
-                "y": spawn_pos.y
-            }
+            "spawn_pos": spawn_pos_obj,
+            "cutscenes": cutscene_list
         }
 
     def to_json_save(self):
@@ -99,14 +107,20 @@ class World:
 
         entity_list = [entity.to_json(False) for entity in self.entities]
 
+        spawn_point_list = {
+            spawn_id: {"block_x": spawn_point.block_x,
+                       "block_y": spawn_point.block_y}
+            for spawn_id, spawn_point in self.spawn_points.items()}
+
+        cutscene_list = [
+            cutscene.to_json(False) for cutscene in self.cutscenes]
+
         return {
-            "version": "0.1.0",
+            "version": "0.2.0",
             "tiles": tiles_list,
             "entities": entity_list,
-            "spawn_points": {
-                spawn_id: {"block_x": spawn_point.block_x,
-                           "block_y": spawn_point.block_y}
-                for spawn_id, spawn_point in self.spawn_points.items()}
+            "spawn_points": spawn_point_list,
+            "cutscenes": cutscene_list
         }
 
     @staticmethod

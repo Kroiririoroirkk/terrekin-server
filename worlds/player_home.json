@@ -1,5 +1,5 @@
 {
-  "version":"0.1.0",
+  "version":"0.2.0",
   "tiles":[
     [
       {"tile_id":"barrier"},
@@ -42,9 +42,45 @@
       {"tile_id":"barrier"}
     ]
   ],
-  "entities": [],
+  "entities": [
+    {
+      "uuid": "052b866108fc4648a59576336e9e913d",
+      "entity_id": "stander",
+      "pos": {"x": 64, "y": 32},
+      "velocity": {"x": 0, "y": 0},
+      "facing": "d"
+    }
+  ],
   "spawn_points":{
     "top_door":{"block_x":1,"block_y":1},
     "bottom_door":{"block_x":2,"block_y":3}
-  }
+  },
+  "cutscenes": [
+    {
+      "scene_type": "move",
+      "uuid": "052b866108fc4648a59576336e9e913d",
+      "move_destination": {"x": 64, "y": 64},
+      "move_duration": 1
+    },
+    {
+      "scene_type": "wait",
+      "wait_duration": 0.5
+    },
+    {
+      "scene_type": "dialogue",
+      "uuid": "052b866108fc4648a59576336e9e913d",
+      "dialogue": "Hi!"
+    },
+    {
+      "scene_type": "dialogue",
+      "uuid": "052b866108fc4648a59576336e9e913d",
+      "dialogue": "This is your house!"
+    },
+    {
+      "scene_type": "move",
+      "uuid": "052b866108fc4648a59576336e9e913d",
+      "move_destination": {"x": 64, "y": 32},
+      "move_duration": 1
+    }
+  ]
 }

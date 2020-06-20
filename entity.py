@@ -1,6 +1,6 @@
-"""The Walker class, which subclasses Entity."""
+"""Defines classes for various entities."""
 from collision import block_movement
-from config import BLOCK_WIDTH, PLAYER_WIDTH
+from config import Config
 from entitybasic import Entity, register_entity
 from geometry import Direction, Vec
 from util import Util
@@ -23,8 +23,8 @@ class Walker(Entity):
         super().__init__(pos, velocity, facing)
         self.speed = velocity.norm()
         self.velocity = Vec(self.speed, 0)
-        self.min_x = pos.x - BLOCK_WIDTH*3
-        self.max_x = pos.x + BLOCK_WIDTH*3
+        self.min_x = pos.x - Config.BLOCK_WIDTH*3
+        self.max_x = pos.x + Config.BLOCK_WIDTH*3
         self.dialogue = [
             "Hi!",
             "This is dialogue.",
@@ -91,7 +91,7 @@ class Walker(Entity):
 
     def get_bounding_box(self):
         """Walker's bounding box is same as player's."""
-        return super().get_bounding_box_of_width(PLAYER_WIDTH)
+        return super().get_bounding_box_of_width(Config.PLAYER_WIDTH)
 
 
 @register_entity("stander")
@@ -168,4 +168,4 @@ class Stander(Entity):
 
     def get_bounding_box(self):
         """Stander's bounding box is same as player's."""
-        return super().get_bounding_box_of_width(PLAYER_WIDTH)
+        return super().get_bounding_box_of_width(Config.PLAYER_WIDTH)

@@ -2,7 +2,7 @@
 from collections import namedtuple
 from typing import Any, Dict
 
-from config import BLOCK_WIDTH
+from config import Config
 from geometry import BoundingBox, Vec
 
 
@@ -38,7 +38,7 @@ class Tile:
     @staticmethod
     def get_bounding_box(tile_pos):
         """Get the BoundingBox for the tile, given its position."""
-        block = Vec(BLOCK_WIDTH, BLOCK_WIDTH)
+        block = Vec(Config.BLOCK_WIDTH, Config.BLOCK_WIDTH)
         return BoundingBox(tile_pos, tile_pos + block)
 
     @staticmethod

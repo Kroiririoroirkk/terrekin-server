@@ -2,7 +2,7 @@
 
 Worlds are stored as JSON. Two different formats are used.
 
-## Format for saving to file (this is version 0.1.0):
+## Format for saving to file (this is version 0.2.0):
 ```json
 {
   "$schema": "http://json-schema.org/draft/2019-09/schema#",
@@ -15,6 +15,10 @@ Worlds are stored as JSON. Two different formats are used.
         "y": {"type": "number"}
       },
       "required": ["x", "y"]
+    },
+    "direction": {
+      "type": "string",
+      "enum": ["r", "d", "l", "u"]
     },
     "tile": {
       "type": "object",
@@ -40,17 +44,49 @@ Worlds are stored as JSON. Two different formats are used.
         },
         "pos": {"$ref": "#/definitions/vec2"},
         "velocity": {"$ref": "#/definitions/vec2"},
-        "facing": {
-          "type": "string",
-          "enum": ["r", "d", "l", "u"]
-        }
+        "facing": {"$ref": "#/definitions/direction"}
       },
       "required": ["uuid", "entity_id", "pos", "velocity", "facing"]
+    },
+    "cutscene": {
+      "type": "object",
+      "oneOf": [
+        {
+          "scene_type": {"const": "wait"},
+          "wait_duration": {
+            "type": "number",
+            "$comment": "Wait time in seconds."
+          }
+        },
+        {
+          "scene_type": {"const": "move"},
+          "uuid": {
+            "type": "string",
+            "$comment": "UUID of the entity to be moved."
+          },
+          "move_destination": {
+            "$ref": "#/definitions/vec2",
+            "$comment": "The position to be moved to."
+          },
+          "move_duration": {
+            "type": "number",
+            "$comment": "Move time in seconds."
+          }
+        },
+        {
+          "scene_type": {"const": "dialogue"},
+          "uuid": {
+            "type": "string",
+            "$comment": "UUID of the entity that is talking."
+          },
+          "dialogue": {"type": "string"}
+        }
+      ]
     }
   },
   "properties": {
     "version": {
-      "const": "0.1.0"
+      "const": "0.2.0"
     },
     "tiles": {
       "type": "array",
@@ -76,13 +112,17 @@ Worlds are stored as JSON. Two different formats are used.
         },
         "required": ["block_x", "block_y"]
       }
+    },
+    "cutscenes": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/cutscene"}
     }
   },
-  "required": ["version", "tiles", "entities", "spawn_points"]
+  "required": ["version", "tiles", "entities", "spawn_points", "cutscenes"]
 }
 ```
 
-## Format for transmission to client (this is version 0.1.0):
+## Format for transmission to client (this is version 0.2.0):
 ```json
 {
   "$schema": "http://json-schema.org/draft/2019-09/schema#",
@@ -94,6 +134,10 @@ Worlds are stored as JSON. Two different formats are used.
         "y": {"type": "number"}
       },
       "required": ["x", "y"]
+    },
+    "direction": {
+      "type": "string",
+      "enum": ["r", "d", "l", "u"]
     },
     "tile": {
       "type": "object",
@@ -119,18 +163,50 @@ Worlds are stored as JSON. Two different formats are used.
         },
         "pos": {"$ref": "#/definitions/vec2"},
         "velocity": {"$ref": "#/definitions/vec2"},
-        "facing": {
-          "type": "string",
-          "enum": ["r", "d", "l", "u"]
-        }
+        "facing": {"$ref": "#/definitions/direction"}
       },
       "required": ["uuid", "entity_id", "pos", "velocity", "facing"]
+    },
+    "cutscene": {
+      "type": "object",
+      "oneOf": [
+        {
+          "scene_type": {"const": "wait"},
+          "wait_duration": {
+            "type": "number",
+            "$comment": "Wait time in seconds."
+          }
+        },
+        {
+          "scene_type": {"const": "move"},
+          "uuid": {
+            "type": "string",
+            "$comment": "UUID of the entity to be moved."
+          },
+          "move_destination": {
+            "$ref": "#/definitions/vec2",
+            "$comment": "The position to be moved to."
+          },
+          "move_duration": {
+            "type": "number",
+            "$comment": "Move time in seconds."
+          }
+        },
+        {
+          "scene_type": {"const": "dialogue"},
+          "uuid": {
+            "type": "string",
+            "$comment": "UUID of the entity that is talking."
+          },
+          "dialogue": {"type": "string"}
+        }
+      ]
     }
   },
   "type": "object",
   "properties": {
     "version": {
-      "const": "0.1.0"
+      "const": "0.2.0"
     },
     "tiles": {
       "type": "array",
@@ -141,8 +217,12 @@ Worlds are stored as JSON. Two different formats are used.
       "type": "array",
       "items": {"$ref": "#/definitions/entity"}
     },
-    "spawn_pos": {"$ref": "#/definitions/vec2"}
+    "spawn_pos": {"$ref": "#/definitions/vec2"},
+    "cutscenes": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/cutscene"}
+    }
   },
-  "required": ["version", "tiles", "entities", "spawn_pos"]
+  "required": ["version", "tiles", "entities", "spawn_pos", "cutscenes"]
 }
 ```

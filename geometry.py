@@ -54,6 +54,15 @@ class Vec(namedtuple("Vec", ["x", "y"])):
         }
         return key.get(direction_str)
 
+    @staticmethod
+    def from_json(vec_obj):
+        """Convert a dict representing a JSON object into a Vec."""
+        return Vec(vec_obj["x"], vec_obj["y"])
+
+    def to_json(self):
+        """Convert a Vec into a dict representing a JSON object."""
+        return {"x": self.x, "y": self.y}
+
 
 class Direction(Enum):
     """Enum representing the four cardinal directions."""

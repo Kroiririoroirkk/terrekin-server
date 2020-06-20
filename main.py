@@ -9,8 +9,7 @@ from websockets.exceptions import ConnectionClosed
 
 from battle import BattleState
 from collision import block_movement
-from config import (
-    MAX_MOVE_DT, PLAYER_SPEED, SPEED_MULTIPLIER, UPDATE_DT, WSPORT)
+from config import Config
 from entitybasic import EntityEventContext, EntityUpdateContext
 import game
 from geometry import Direction, Vec
@@ -82,7 +81,7 @@ async def parseMessage(message, username, ws):
             return
         multiplier = 1
         if message.startswith("fastmove|"):
-            multiplier = SPEED_MULTIPLIER
+            multiplier = Config.SPEED_MULTIPLIER
         parts = message.split("|")
         direction = parts[1]
         dir_vec = sum([
@@ -93,9 +92,9 @@ async def parseMessage(message, username, ws):
             start_pos = player.pos
             start_tiles = player.get_tiles_touched()
             now = time.monotonic()
-            dt = min(now - player.time_of_last_move, MAX_MOVE_DT)
+            dt = min(now - player.time_of_last_move, Config.MAX_MOVE_DT)
             player.time_of_last_move = now
-            offset = dir_vec * (PLAYER_SPEED * dt * multiplier)
+            offset = dir_vec * (Config.PLAYER_SPEED * dt * multiplier)
             player.pos += offset
             tile_coords_touching = player.get_tiles_touched()
             wall_tiles = [
@@ -229,9 +228,9 @@ async def update_loop():
                     game=running_game,
                     world=world,
                     dt=dt))
-        await asyncio.sleep(UPDATE_DT)
+        await asyncio.sleep(Config.UPDATE_DT)
 
-start_server = websockets.serve(run, "0.0.0.0", WSPORT)
+start_server = websockets.serve(run, "0.0.0.0", Config.WSPORT)
 
 
 def cleanup(sig, frame):

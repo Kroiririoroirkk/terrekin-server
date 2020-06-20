@@ -2,7 +2,7 @@
 import math
 
 from battle import Combatant
-from config import BLOCK_WIDTH, PLAYER_WIDTH
+from config import Config
 from entitybasic import Entity
 from geometry import Direction, Vec
 from world import World
@@ -34,7 +34,7 @@ class Player(Entity, Combatant):
         if self.facing is Direction.LEFT:
             return [
                 e for e in world.entities
-                if self.pos.dist_to(e.pos) < 2 * BLOCK_WIDTH
+                if self.pos.dist_to(e.pos) < 2 * Config.BLOCK_WIDTH
                 and (
                     (3*math.pi/4) < self.pos.angle_to(e.pos) < (math.pi)
                     or (-math.pi) < self.pos.angle_to(e.pos) < (-3*math.pi/4))]
@@ -43,12 +43,12 @@ class Player(Entity, Combatant):
         max_angle = facing_angle + math.pi/4
         return [
             e for e in world.entities
-            if self.pos.dist_to(e.pos) < 2 * BLOCK_WIDTH
+            if self.pos.dist_to(e.pos) < 2 * Config.BLOCK_WIDTH
             and min_angle < self.pos.angle_to(e.pos) < max_angle]
 
     def get_bounding_box(self):
         """Get bounding box the size of a player."""
-        return super().get_bounding_box_of_width(PLAYER_WIDTH)
+        return super().get_bounding_box_of_width(Config.PLAYER_WIDTH)
 
     def respawn(self):
         """Reset player's location and other properties."""
