@@ -1,7 +1,7 @@
 """Defines classes for various tiles."""
 import random
 
-from battle import RandomMoveAICombatant
+from battle import RandomMoveAICombatant, Moves, Species
 from tilebasic import (
     Tile, TilePlus, TileMetadata,
     register_tile, register_tile_plus)
@@ -26,7 +26,11 @@ class WildGrass(Tile):
                     event_ctx.username,
                     event_ctx.ws,
                     event_ctx.player,
-                    RandomMoveAICombatant()
+                    RandomMoveAICombatant(
+                        species=Species.SCARPFALL,
+                        level=1,
+                        moves=[Moves.SOIL_SLAP]
+                    )
                 )
             except ValueError:
                 pass

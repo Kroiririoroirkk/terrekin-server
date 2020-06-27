@@ -52,9 +52,9 @@ This message retrieves the usernames of other players and their locations, as we
 
 ### battlemove
 
-Parameters (1): `move_num`
+Parameters (3): `uuid`, `move_num`, `target_uuid`
 
-This message tells the server what move to use after the client has received a [battlemoverequest](#battlemoverequest) message. The parameter `move_num` is a zero-indexed number (i.e. to pick the first move listed, the client should send `0`).
+This message tells the server what move to use after the client has received a [battlemoverequest](#battlemoverequest) message. The parameter `uuid` is the UUID of the combatant which is moving. The parameter `move_num` is a zero-indexed number (i.e. to pick the first move listed, the client should send `0`). The parameter `target_uuid` is the UUID of the combatant which is being targeted by the move.
 
 ## Messages sent by the server
 
@@ -114,21 +114,102 @@ This message is sent when a player with username `tagging_player` sends an `inte
 
 ### battlestart
 
-No parameters.
+Parameters (1): `side`
 
-This message is sent when the player is engaged in a battle, e.g. in a wild-grass encounter.
+This message is sent when the player is engaged in a battle, e.g. in a wild-grass encounter. The parameter `side` is the side that the player is a part of, either "side1" or "side2".
 
 ### battlemovereq
 
-Parameters (Variable number, given by number of moves): `move1`, `move2`, etc.
+Parameters (1): `uuid`
 
-This message is sent when the server is waiting for the player to choose a move. A [battlemove](#battlemove) message should be sent back.
+This message is sent when the server is waiting for the player to choose a move for the combatant with UUID `uuid`. A [battlemove](#battlemove) message should be sent back.
 
 ### battlestatus
 
-Parameters (2): `player_hp`, `enemy_hp`
+Parameters (1): `battle`
 
-This message is sent after a player makes a move to indicate the HPs of the combatants. THIS MESSAGE IS VERY LIKELY TO CHANGE AS NEW FEATURES GET ADDED.
+This message is sent before each turn of a battle. The `battle` parameter is a JSON object representing the battle. Only partial information about the opponent's side is given. The format of the JSON object is so:
+
+```json
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "type": "object",
+  "definitions": {
+    "stats": {
+      "type": "object",
+      "properties": {
+        "hp": {"type": "number"},
+        "attack": {"type": "number"},
+        "defense": {"type": "number"},
+        "mattack": {"type": "number"},
+        "mdefense": {"type": "number"},
+        "speed": {"type": "number"},
+        "charisma": {"type": "number"},
+        "dex": {"type": "number"},
+        "stam": {"type": "number"}
+      },
+      "required": ["hp", "attack", "defense", "mattack", "mdefense", "speed", "charisma", "dex", "stam"]
+    },
+    "move": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"},
+        "element": {"type": "string"},
+        "type": {"type": "string"},
+        "stamina_draw": {"type": "number"},
+        "power": {"type": "number"},
+        "move_time": {"type": "number"},
+        "accuracy": {"type": "number"},
+        "description": {"type": "string"}
+      },
+      "required": ["name", "element", "type", "stamina_draw", "power", "move_time", "accuracy", "description"]
+    },
+    "combatant_full": {
+      "type": "object",
+      "properties": {
+        "species": {"type": "string"},
+        "level": {"type": "number"},
+        "stats": {"$ref": "#/definitions/stats"},
+        "max_hp": {"type": "number"},
+        "moves": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/move"},
+          "minItems": 1
+        }
+      },
+      "required": ["species", "level", "stats", "max_hp", "moves"]
+    },
+    "combatant_partial": {
+      "type": "object",
+      "properties": {
+        "species": {"type": "string"},
+        "level": {"type": "number"},
+        "hp_proportion": {"type": "number"}
+      },
+      "required": ["species", "level", "hp_proportion"]
+    }
+  },
+  "additionalProperties": {
+    "$comment": "The property name is the side, either side1 or side2.",
+    "type": "object",
+    "additionalProperties": {
+      "$comment": "The property name is the UUID of a combatant.",
+      "oneOf": [
+        {
+          "$comment": "Full information is given for combatants on the player's side.",
+          "$ref": "#/definitions/combatant_full"
+        },
+        {
+          "$comment": "Partial information is given for combatants on the opponent's side.",
+          "$ref": "#/definitions/combatant_partial"
+        }
+      ]
+    }
+  },
+  "minProperties": 2,
+  "maxProperties": 2
+}
+```
 
 ### battleend
 

@@ -1,6 +1,6 @@
 """The Game class handles all of the player objects."""
 
-from battle import PlayerAIBattle
+from battle import Battle
 from util import Util
 
 
@@ -27,9 +27,8 @@ class Game:
 
     def player_in_battle(self, username):
         """Check if a player is in a battle."""
-        for battle in self.battles:
-            if battle.player_combatant.username == username:
-                return True
+        if self.get_battle_by_username(username):
+            return True
         return False
 
     def get_players_by_world(self, world_id):
@@ -38,22 +37,25 @@ class Game:
 
     def get_battle_by_username(self, username):
         """Get the battle that the player with the given username is in."""
+        combatant_id = self.get_player(username).combatant_id
         for battle in self.battles:
-            if battle.player_combatant.username == username:
+            if battle.has_combatant(combatant_id):
                 return battle
+        return None
 
     def del_battle_by_username(self, username):
         """Delete the battle that the player with the given username is in."""
+        combatant_id = self.get_player(username).combatant_id
         self.battles = [b for b in self.battles
-                        if b.player_combatant.username != username]
+                        if not b.has_combatant(combatant_id)]
 
     async def create_battle(self, username, ws, player, ai):
         """Create a battle with the given player and AI."""
         if self.player_in_battle(username):
             raise ValueError
-        battle = PlayerAIBattle(player, ai)
+        battle = Battle([player], [ai])
         self.battles.append(battle)
-        await Util.send_battle_start(ws)
-        await Util.send_battle_status(
-            ws, player.hp, ai.hp)
-        await Util.send_move_request(ws, player.moves)
+        c_id = player.combatant_id
+        await Util.send_battle_start(ws, c_id.side)
+        await Util.send_battle_status(ws, battle, c_id.side)
+        await Util.send_move_request(ws, c_id.combatant_uuid)

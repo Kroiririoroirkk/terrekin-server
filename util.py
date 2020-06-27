@@ -70,20 +70,21 @@ class Util:
             pass
 
     @staticmethod
-    async def send_battle_start(ws):
+    async def send_battle_start(ws, side):
         """See the battlestart message under PROTOCOL.md for explanation."""
-        await ws.send("battlestart")
+        await ws.send(f"battlestart|{side.value}")
 
     @staticmethod
-    async def send_move_request(ws, moves):
+    async def send_move_request(ws, uuid):
         """See the battlemovereq message under PROTOCOL.md for explanation."""
-        moves_str = "|".join(m.name for m in moves)
-        await ws.send(f"battlemovereq|{moves_str}")
+        await ws.send(f"battlemovereq|{uuid.hex}")
 
     @staticmethod
-    async def send_battle_status(ws, player_hp, enemy_hp):
+    async def send_battle_status(ws, battle, side):
         """See the battlestatus message under PROTOCOL.md for explanation."""
-        await ws.send(f"battlestatus|{player_hp}|{enemy_hp}")
+        battle_str = json.dumps(battle.to_json(side),
+                                separators=(",", ":"))
+        await ws.send(f"battlestatus|{battle_str}")
 
     @staticmethod
     async def send_battle_end(ws):

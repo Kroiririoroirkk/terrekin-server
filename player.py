@@ -1,7 +1,7 @@
 """Defines the Player class."""
 import math
 
-from battle import Combatant
+from battle import Combatant, Moves, Species
 from config import Config
 from entitybasic import Entity
 from geometry import Direction, Vec
@@ -14,7 +14,10 @@ class Player(Entity, Combatant):
     def __init__(self, username, pos, velocity, facing, ws, world_id):
         """Initialize player and delete UUID (players don't have UUIDs)."""
         Entity.__init__(self, pos, velocity, facing)
-        Combatant.__init__(self)
+        Combatant.__init__(self,
+                           Species.HUMAN,
+                           level=1,
+                           moves=[Moves.PUNCH, Moves.KICK])
         self.username = username
         self.world_id = world_id
         self.ws = ws

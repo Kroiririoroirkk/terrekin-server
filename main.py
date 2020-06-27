@@ -7,7 +7,7 @@ import uuid
 import websockets
 from websockets.exceptions import ConnectionClosed
 
-from battle import BattleState
+from battle import MoveChoice
 from collision import block_movement
 from config import Config
 from entitybasic import EntityEventContext, EntityUpdateContext
@@ -49,10 +49,10 @@ async def run(ws, path):
         await Util.send_world(ws, world, player.pos)
         if running_game.player_in_battle(username):
             battle = running_game.get_battle_by_username(username)
-            await Util.send_battle_start(ws)
-            await Util.send_battle_status(
-                ws, battle.player_combatant.hp, battle.ai_combatant.hp)
-            await Util.send_move_request(ws, player.moves)
+            c_id = player.combatant_id
+            await Util.send_battle_start(ws, c_id.side)
+            await Util.send_battle_status(ws, battle, c_id.side)
+            await Util.send_move_request(ws, c_id.combatant_uuid)
     except ValueError:
         print("New user: " + username)
         print("Connecting from: "
@@ -188,21 +188,28 @@ async def parseMessage(message, username, ws):
         except ValueError:
             pass
     elif message.startswith("battlemove"):
-        if not running_game.player_in_battle(username):
+        battle = running_game.get_battle_by_username(username)
+        if not battle:
             return
         parts = message.split("|")
         try:
-            move_choice = player.moves[int(parts[1])]
-            battle = running_game.get_battle_by_username(username)
-            battle_state = battle.process_player_move(move_choice)
-            if battle_state is BattleState.ONGOING:
-                await Util.send_move_request(ws, player.moves)
-                await Util.send_battle_status(
-                    ws, player.hp, battle.ai_combatant.hp)
-            elif battle_state is BattleState.PLAYER_WIN:
+            combatant_uuid = uuid.UUID(parts[1])
+            if combatant_uuid != player.combatant_id.combatant_uuid:
+                raise ValueError
+            move = player.moves[int(parts[2])]
+            target_uuid = uuid.UUID(parts[3])
+            move_choice = MoveChoice(
+                move,
+                battle.get_combatant_id_by_uuid(target_uuid))
+            winning_side = battle.process_player_move(move_choice)
+            c_id = player.combatant_id
+            if not winning_side:
+                await Util.send_move_request(ws, c_id.combatant_uuid)
+                await Util.send_battle_status(ws, battle, c_id.side)
+            elif winning_side is c_id.side:
                 await Util.send_battle_end(ws)
                 running_game.del_battle_by_username(username)
-            elif battle_state is BattleState.AI_WIN:
+            else:
                 await Util.send_battle_end(ws)
                 await Util.send_death(ws)
                 running_game.del_battle_by_username(username)
