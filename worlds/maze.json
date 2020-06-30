@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "tiles": [
   [{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"},{"tile_id":"wall"}],
   [{"tile_id":"wall"},{"tile_id":"portal","tile_data":{"world_id":"starting_world","spawn_id":"maze_entrance","ground_tile":{"tile_id":"grass"}}},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"grass"},{"tile_id":"portal","tile_data":{"world_id":"maze","spawn_id":"upper_middle","ground_tile":{"tile_id":"grass"}}},{"tile_id":"wall"}],
@@ -66,5 +66,6 @@
       "block_y": 7
     }
   },
-  "cutscenes": []
+  "cutscenes": [],
+  "patches": {}
 }

@@ -47,33 +47,6 @@ class MoveType(Enum):
         self.display_name = display_name
 
 
-class Move(namedtuple("Move", [
-        "name",
-        "element",
-        "type",
-        "stamina_draw",
-        "power",
-        "move_time",
-        "accuracy",
-        "effect",
-        "description"
-])):
-    """A move that a human/terrekin can use in combat."""
-
-    def to_json(self):
-        """Convert a Move to a dict which can be converted to a JSON string."""
-        return {
-            "name": self.name,
-            "element": self.element.id,
-            "type": self.type.id,
-            "stamina_draw": self.stamina_draw,
-            "power": self.power,
-            "move_time": self.move_time,
-            "accuracy": self.accuracy,
-            "description": self.description
-        }
-
-
 class MoveEffect:
     """The secondary effect of a move."""
 
@@ -85,6 +58,102 @@ class MoveEffects:
     """Helper functions/constants to create a MoveEffect."""
 
     NO_EFFECT = MoveEffect()
+
+
+_Move = namedtuple("_Move", [
+    "id",
+    "display_name",
+    "element",
+    "type",
+    "stamina_draw",
+    "power",
+    "move_time",
+    "accuracy",
+    "effect",
+    "description"
+])
+
+
+class Move(Enum):
+    """A move that a human/terrekin can use in combat."""
+
+    PUNCH = _Move(
+        id="punch",
+        display_name="Punch",
+        element=Element.UNTYPED,
+        type=MoveType.PHYSICAL,
+        stamina_draw=1,
+        power=1,
+        move_time=2,
+        accuracy=1,
+        effect=MoveEffects.NO_EFFECT,
+        description="Punch your target.")
+
+    KICK = _Move(
+        id="kick",
+        display_name="Kick",
+        element=Element.UNTYPED,
+        type=MoveType.PHYSICAL,
+        stamina_draw=2,
+        power=2,
+        move_time=2,
+        accuracy=1,
+        effect=MoveEffects.NO_EFFECT,
+        description="Kick your target.")
+
+    SOIL_SLAP = _Move(
+        id="soil_slap",
+        display_name="Soil Slap",
+        element=Element.EARTH,
+        type=MoveType.MAGIC,
+        stamina_draw=2,
+        power=2,
+        move_time=2,
+        accuracy=1,
+        effect=MoveEffects.NO_EFFECT,
+        description="Slap your enemy with a hand made of soil.")
+
+    def __init__(self, move_id, display_name, element, move_type,
+                 stamina_draw, power, move_time, accuracy,
+                 effect, description):
+        """Initialize a Move."""
+        self.id = move_id
+        self.display_name = display_name
+        self.element = element
+        self.type = move_type
+        self.stamina_draw = stamina_draw
+        self.power = power
+        self.move_time = move_time
+        self.accuracy = accuracy
+        self.effect = effect
+        self.description = description
+
+    @staticmethod
+    def get_by_id(move_id):
+        """Get the Move corresponding to a given ID."""
+        for move in list(Move):
+            if move.id == move_id:
+                return move
+        raise ValueError
+
+    def to_json(self):
+        """Convert a Move to a dict which can be converted to a JSON string."""
+        return {
+            "name": self.display_name,
+            "element": self.element.id,
+            "type": self.type.id,
+            "stamina_draw": self.stamina_draw,
+            "power": self.power,
+            "move_time": self.move_time,
+            "accuracy": self.accuracy,
+            "description": self.description
+        }
+
+
+MoveChoice = namedtuple("MoveChoice", [
+    "move",
+    "target"
+])
 
 
 Stats = namedtuple("Stats", [
@@ -133,48 +202,13 @@ class Species(Enum):
         self.display_name = display_name
         self.base_stats = base_stats
 
-
-class Moves:
-    """Class containing a list of moves."""
-
-    PUNCH = Move(
-        name="Punch",
-        element=Element.UNTYPED,
-        type=MoveType.PHYSICAL,
-        stamina_draw=1,
-        power=1,
-        move_time=2,
-        accuracy=1,
-        effect=MoveEffects.NO_EFFECT,
-        description="Punch your target.")
-
-    KICK = Move(
-        name="Kick",
-        element=Element.UNTYPED,
-        type=MoveType.PHYSICAL,
-        stamina_draw=2,
-        power=2,
-        move_time=2,
-        accuracy=1,
-        effect=MoveEffects.NO_EFFECT,
-        description="Kick your target.")
-
-    SOIL_SLAP = Move(
-        name="Soil Slap",
-        element=Element.EARTH,
-        type=MoveType.MAGIC,
-        stamina_draw=2,
-        power=2,
-        move_time=2,
-        accuracy=1,
-        effect=MoveEffects.NO_EFFECT,
-        description="Slap your enemy with a hand made of soil.")
-
-
-MoveChoice = namedtuple("MoveChoice", [
-    "move",
-    "target"
-])
+    @staticmethod
+    def get_by_id(species_id):
+        """Get the Species corresponding to a given ID."""
+        for species in list(Species):
+            if species.id == species_id:
+                return species
+        raise ValueError
 
 
 class Combatant:

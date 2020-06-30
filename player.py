@@ -1,7 +1,7 @@
 """Defines the Player class."""
 import math
 
-from battle import Combatant, Moves, Species
+from battle import Combatant, Move, Species
 from config import Config
 from entitybasic import Entity
 from geometry import Direction, Vec
@@ -17,7 +17,7 @@ class Player(Entity, Combatant):
         Combatant.__init__(self,
                            Species.HUMAN,
                            level=1,
-                           moves=[Moves.PUNCH, Moves.KICK])
+                           moves=[Move.PUNCH, Move.KICK])
         self.username = username
         self.world_id = world_id
         self.ws = ws

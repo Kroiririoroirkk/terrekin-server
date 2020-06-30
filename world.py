@@ -1,6 +1,8 @@
 """Defines the World class."""
+from collections import namedtuple
 from typing import Dict
 
+from battle import Move, Species
 from cutscene import Cutscene
 from entitybasic import Entity
 from tilebasic import Empty, Tile
@@ -10,18 +12,49 @@ from tilecoord import TileCoord
 _worlds: Dict[str, "World"] = {}
 
 
+class Encounter(namedtuple("Encounter", [
+        "species",
+        "min_level",
+        "max_level",
+        "moves",
+        "weight"
+])):
+    """Stores info for a possible WildGrass encounter."""
+
+    @staticmethod
+    def from_json(data):
+        """Convert a dict representing a JSON object into an Encounter."""
+        return Encounter(
+            Species.get_by_id(data["species"]) if data["species"] else None,
+            data["min_level"],
+            data["max_level"],
+            [Move.get_by_id(move) for move in data["moves"]],
+            data["weight"])
+
+    def to_json(self):
+        """Serialize to JSON."""
+        return {
+            "species": self.species.id if self.species else None,
+            "min_level": self.min_level,
+            "max_level": self.max_level,
+            "moves": [move.id for move in self.moves],
+            "weight": self.weight
+        }
+
+
 class World:
     """The World class represents an area where the player can explore.
 
     Different Worlds are linked together through portals.
     """
 
-    def __init__(self, tiles, entities, spawn_points, cutscenes):
+    def __init__(self, tiles, entities, spawn_points, cutscenes, patches):
         """Initialize the World with its contents."""
         self.tiles = tiles
         self.entities = entities
         self.spawn_points = spawn_points
         self.cutscenes = cutscenes
+        self.patches = patches
 
     def get_tile(self, tile_coord):
         """Get the tile positioned at the given TileCoord."""
@@ -42,7 +75,7 @@ class World:
     @staticmethod
     def from_json(world_dict):
         """Convert a dict representing a JSON object into a world."""
-        if world_dict["version"] != "0.2.0":
+        if world_dict["version"] != "0.3.0":
             raise ValueError
         tiles = []
         for row in world_dict["tiles"]:
@@ -64,7 +97,12 @@ class World:
         cutscenes = [
             Cutscene.from_json(scene) for scene in world_dict["cutscenes"]]
 
-        return World(tiles, entities, spawn_points, cutscenes)
+        patches = {
+            patch_id: [Encounter.from_json(encounter) for encounter in patch]
+            for patch_id, patch
+            in world_dict["patches"].items()}
+
+        return World(tiles, entities, spawn_points, cutscenes, patches)
 
     def to_json_client(self, spawn_pos):
         """Convert a world to a dict which can be converted to a JSON string.
@@ -115,12 +153,17 @@ class World:
         cutscene_list = [
             cutscene.to_json(False) for cutscene in self.cutscenes]
 
+        patch_list = {
+            patch_id: [encounter.to_json() for encounter in patch]
+            for patch_id, patch in self.patches.items()}
+
         return {
-            "version": "0.2.0",
+            "version": "0.3.0",
             "tiles": tiles_list,
             "entities": entity_list,
             "spawn_points": spawn_point_list,
-            "cutscenes": cutscene_list
+            "cutscenes": cutscene_list,
+            "patches": patch_list
         }
 
     @staticmethod

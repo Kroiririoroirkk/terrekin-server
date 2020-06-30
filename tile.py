@@ -1,7 +1,7 @@
 """Defines classes for various tiles."""
 import random
 
-from battle import RandomMoveAICombatant, Moves, Species
+from battle import RandomMoveAICombatant, Move, Species
 from tilebasic import (
     Tile, TilePlus, TileMetadata,
     register_tile, register_tile_plus)
@@ -14,22 +14,54 @@ class Grass(Tile):
     """Class for the grass tile."""
 
 
-@register_tile("wild_grass")
-class WildGrass(Tile):
+class WildGrassData(TileMetadata):
+    """Stores information about the encounters in a wild grass tile."""
+
+    def __init__(self, patch_id):
+        """Initialize with the patch_id."""
+        super().__init__()
+        self.patch_id = patch_id
+
+    @staticmethod
+    def from_json(data):
+        """Convert a dict representing a JSON object into a portal data."""
+        return WildGrassData(data["patch_id"])
+
+    def to_json(self, is_to_client):
+        """Serialize to JSON."""
+        return {"patch_id": self.patch_id}
+
+
+@register_tile_plus("wild_grass", WildGrassData)
+class WildGrass(TilePlus):
     """Class for the wild grass tile."""
 
     async def on_move_on(self, event_ctx, player_start_pos):
         """Chance of triggering a wild encounter."""
-        if random.random() < 0.1:
+        patch = event_ctx.world.patches.get(self.data.patch_id)
+        if not patch:
+            return
+        random_num = random.random()
+        weight_total = sum(encounter.weight for encounter in patch)
+        start = 0
+        generated_encounter = None
+        for encounter in patch:
+            proportion = encounter.weight / weight_total
+            if start <= random_num <= (start + proportion):
+                generated_encounter = encounter
+                break
+            start += proportion
+        if generated_encounter and generated_encounter.species:
             try:
                 await event_ctx.game.create_battle(
                     event_ctx.username,
                     event_ctx.ws,
                     event_ctx.player,
                     RandomMoveAICombatant(
-                        species=Species.SCARPFALL,
-                        level=1,
-                        moves=[Moves.SOIL_SLAP]
+                        species=generated_encounter.species,
+                        level=random.randint(generated_encounter.min_level,
+                                             generated_encounter.max_level),
+                        moves=generated_encounter.moves
                     )
                 )
             except ValueError:
@@ -59,7 +91,7 @@ class PortalData(TileMetadata):
 
     @staticmethod
     def from_json(data):
-        """Convert a dict representing a JSON object into a portal data."""
+        """Convert a dict representing a JSON object into PortalData."""
         return PortalData(data["world_id"], data["spawn_id"],
                           Tile.from_json(data["ground_tile"]))
 
@@ -100,7 +132,7 @@ class SignData(TileMetadata):
 
     @staticmethod
     def from_json(data):
-        """Convert a dict representing a JSON object into sign data."""
+        """Convert a dict representing a JSON object into SignData."""
         return SignData(data["text"], Tile.from_json(data["ground_tile"]))
 
     def to_json(self, is_to_client):

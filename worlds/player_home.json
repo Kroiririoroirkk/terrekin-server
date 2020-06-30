@@ -1,5 +1,5 @@
 {
-  "version":"0.2.0",
+  "version":"0.3.0",
   "tiles":[
     [
       {"tile_id":"barrier"},
@@ -82,5 +82,6 @@
       "move_destination": {"x": 64, "y": 32},
       "move_duration": 1
     }
-  ]
+  ],
+  "patches": {}
 }

@@ -102,7 +102,9 @@ class TilePlus(Tile):
                 if k in self.data.send_to_client}
         else:
             tile_data = self.data.to_json(False)
-        return {"tile_id": self.get_tile_id(), "tile_data": tile_data}
+        if tile_data:
+            return {"tile_id": self.get_tile_id(), "tile_data": tile_data}
+        return {"tile_id": self.get_tile_id()}
 
 
 class TileMetadata:

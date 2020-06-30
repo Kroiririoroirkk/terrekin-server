@@ -2,7 +2,7 @@
 
 Worlds are stored as JSON. Two different formats are used.
 
-## Format for saving to file (this is version 0.2.0):
+## Format for saving to file (this is version 0.3.0):
 ```json
 {
   "$schema": "http://json-schema.org/draft/2019-09/schema#",
@@ -48,6 +48,14 @@ Worlds are stored as JSON. Two different formats are used.
       },
       "required": ["uuid", "entity_id", "pos", "velocity", "facing"]
     },
+    "spawn_point": {
+      "type": "object",
+      "properties": {
+        "block_x": {"type": "integer", "minimum": 0},
+        "block_y": {"type": "integer", "minimum": 0}
+      },
+      "required": ["block_x", "block_y"]
+    },
     "cutscene": {
       "type": "object",
       "oneOf": [
@@ -82,11 +90,26 @@ Worlds are stored as JSON. Two different formats are used.
           "dialogue": {"type": "string"}
         }
       ]
+    },
+    "patch": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/encounter"}
+    },
+    "encounter": {
+      "type": "object",
+      "properties": {
+        "species": {"type": ["string", "null"]},
+        "min_level": {"type": "number"},
+        "max_level": {"type": "number"},
+        "moves": {"type": "array", "items": {"type": "string"}},
+        "weight": {"type": "number"}
+      },
+      "required": ["species", "min_level", "max_level", "moves", "weight"]
     }
   },
   "properties": {
     "version": {
-      "const": "0.2.0"
+      "const": "0.3.0"
     },
     "tiles": {
       "type": "array",
@@ -104,21 +127,19 @@ Worlds are stored as JSON. Two different formats are used.
       "type": "object",
       "$comment": "The property name should be the spawn point ID.",
       "minProperties": 1,
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "block_x": {"type": "integer", "minimum": 0},
-          "block_y": {"type": "integer", "minimum": 0}
-        },
-        "required": ["block_x", "block_y"]
-      }
+      "additionalProperties": {"$ref": "#/definitions/spawn_point"}
     },
     "cutscenes": {
       "type": "array",
       "items": {"$ref": "#/definitions/cutscene"}
+    },
+    "patches": {
+      "type": "object",
+      "$comment": "The property name should be the patch ID.",
+      "additionalProperties": {"$ref": "#/definitions/patch"}
     }
   },
-  "required": ["version", "tiles", "entities", "spawn_points", "cutscenes"]
+  "required": ["version", "tiles", "entities", "spawn_points", "cutscenes", "patches"]
 }
 ```
 
