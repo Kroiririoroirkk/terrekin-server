@@ -195,6 +195,61 @@ class Species(Enum):
         dex=1,
         stam=50
     )
+    ORELICK = "orelick", "Orelick", Stats(
+        hp=10,
+        attack=1,
+        defense=1,
+        mattack=1,
+        mdefense=1,
+        speed=1,
+        charisma=1,
+        dex=1,
+        stam=50
+    )
+    POUFFLE = "pouffle", "Poufflé", Stats(
+        hp=10,
+        attack=1,
+        defense=1,
+        mattack=1,
+        mdefense=1,
+        speed=1,
+        charisma=1,
+        dex=1,
+        stam=50
+    )
+    LAVADOREY = "lavadorey", "Lavadorey", Stats(
+        hp=10,
+        attack=1,
+        defense=1,
+        mattack=1,
+        mdefense=1,
+        speed=1,
+        charisma=1,
+        dex=1,
+        stam=50
+    )
+    DONNERLO = "donnerlo", "Donnerlo", Stats(
+        hp=10,
+        attack=1,
+        defense=1,
+        mattack=1,
+        mdefense=1,
+        speed=1,
+        charisma=1,
+        dex=1,
+        stam=50
+    )
+    VINELETTE = "vinelette", "Vinelette", Stats(
+        hp=10,
+        attack=1,
+        defense=1,
+        mattack=1,
+        mdefense=1,
+        speed=1,
+        charisma=1,
+        dex=1,
+        stam=50
+    )
 
     def __init__(self, species_id, display_name, base_stats):
         """Initialize with a unique name and a display name."""

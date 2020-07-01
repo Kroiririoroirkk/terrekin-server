@@ -1472,11 +1472,46 @@
         "weight": 1
       },
       {
+        "species": "orelick",
+        "min_level": 1,
+        "max_level": 1,
+        "moves": ["soil_slap"],
+        "weight": 1
+      },
+      {
+        "species": "pouffle",
+        "min_level": 1,
+        "max_level": 1,
+        "moves": ["soil_slap"],
+        "weight": 1
+      },
+      {
+        "species": "lavadorey",
+        "min_level": 1,
+        "max_level": 1,
+        "moves": ["soil_slap"],
+        "weight": 1
+      },
+      {
+        "species": "donnerlo",
+        "min_level": 1,
+        "max_level": 1,
+        "moves": ["soil_slap"],
+        "weight": 1
+      },
+      {
+        "species": "vinelette",
+        "min_level": 1,
+        "max_level": 1,
+        "moves": ["soil_slap"],
+        "weight": 1
+      },
+      {
         "species": null,
         "min_level": 0,
         "max_level": 0,
         "moves": [],
-        "weight": 9
+        "weight": 12
       }
     ]
   }
