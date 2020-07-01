@@ -250,6 +250,17 @@ class Species(Enum):
         dex=1,
         stam=50
     )
+    WHIRLYBIRD = "whirlybird", "Whirlybird", Stats(
+        hp=10,
+        attack=1,
+        defense=1,
+        mattack=1,
+        mdefense=1,
+        speed=1,
+        charisma=1,
+        dex=1,
+        stam=50
+    )
 
     def __init__(self, species_id, display_name, base_stats):
         """Initialize with a unique name and a display name."""

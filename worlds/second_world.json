@@ -58,7 +58,7 @@
   "cutscenes": [],
   "patches": {
     "0": [{
-        "species": "scarpfall",
+        "species": "whirlybird",
         "min_level": 1,
         "max_level": 1,
         "moves": ["soil_slap"],
@@ -69,7 +69,7 @@
         "min_level": 0,
         "max_level": 0,
         "moves": [],
-        "weight": 9
+        "weight": 3
       }
     ]
   }
