@@ -206,6 +206,17 @@ class Species(Enum):
         dex=1,
         stam=50
     )
+    AQUANIMA = "aquanima", "Aquanima", Stats(
+        hp=10,
+        attack=1,
+        defense=1,
+        mattack=1,
+        mdefense=1,
+        speed=1,
+        charisma=1,
+        dex=1,
+        stam=50
+    )
     POUFFLE = "pouffle", "Poufflé", Stats(
         hp=10,
         attack=1,
@@ -250,7 +261,95 @@ class Species(Enum):
         dex=1,
         stam=50
     )
+    CALDERGRUB = "caldergrub", "Caldergrub", Stats(
+        hp=10,
+        attack=1,
+        defense=1,
+        mattack=1,
+        mdefense=1,
+        speed=1,
+        charisma=1,
+        dex=1,
+        stam=50
+    )
+    CAZADARE = "cazadare", "Cazadare", Stats(
+        hp=10,
+        attack=1,
+        defense=1,
+        mattack=1,
+        mdefense=1,
+        speed=1,
+        charisma=1,
+        dex=1,
+        stam=50
+    )
     WHIRLYBIRD = "whirlybird", "Whirlybird", Stats(
+        hp=10,
+        attack=1,
+        defense=1,
+        mattack=1,
+        mdefense=1,
+        speed=1,
+        charisma=1,
+        dex=1,
+        stam=50
+    )
+    QUEENFISHER = "queenfisher", "Queenfisher", Stats(
+        hp=10,
+        attack=1,
+        defense=1,
+        mattack=1,
+        mdefense=1,
+        speed=1,
+        charisma=1,
+        dex=1,
+        stam=50
+    )
+    DRISSENGAN = "drissengan", "Drissengan", Stats(
+        hp=10,
+        attack=1,
+        defense=1,
+        mattack=1,
+        mdefense=1,
+        speed=1,
+        charisma=1,
+        dex=1,
+        stam=50
+    )
+    LEIDEBLADE = "leideblade", "Leideblade", Stats(
+        hp=10,
+        attack=1,
+        defense=1,
+        mattack=1,
+        mdefense=1,
+        speed=1,
+        charisma=1,
+        dex=1,
+        stam=50
+    )
+    NAILIST = "nailist", "Nailist", Stats(
+        hp=10,
+        attack=1,
+        defense=1,
+        mattack=1,
+        mdefense=1,
+        speed=1,
+        charisma=1,
+        dex=1,
+        stam=50
+    )
+    OILLY = "oilly", "Oilly", Stats(
+        hp=10,
+        attack=1,
+        defense=1,
+        mattack=1,
+        mdefense=1,
+        speed=1,
+        charisma=1,
+        dex=1,
+        stam=50
+    )
+    TERREPIN = "terrepin", "Terrepin", Stats(
         hp=10,
         attack=1,
         defense=1,

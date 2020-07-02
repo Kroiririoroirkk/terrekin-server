@@ -65,6 +65,13 @@
         "weight": 1
       },
       {
+        "species": "terrepin",
+        "min_level": 1,
+        "max_level": 1,
+        "moves": ["soil_slap"],
+        "weight": 1
+      },
+      {
         "species": null,
         "min_level": 0,
         "max_level": 0,

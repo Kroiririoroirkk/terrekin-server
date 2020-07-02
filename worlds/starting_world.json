@@ -560,12 +560,12 @@
       {"tile_id": "grass"},
       {"tile_id": "grass"},
       {"tile_id": "grass"},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
       {"tile_id": "shallow_water"},
       {"tile_id": "deep_water"},
       {"tile_id": "deep_water"},
@@ -601,7 +601,7 @@
       {"tile_id": "grass"},
       {"tile_id": "grass"},
       {"tile_id": "grass"},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
       {"tile_id": "grass"},
       {"tile_id": "shallow_water"},
       {"tile_id": "shallow_water"},
@@ -639,7 +639,7 @@
       {"tile_id": "grass"},
       {"tile_id": "grass"},
       {"tile_id": "grass"},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
       {"tile_id": "grass"},
       {"tile_id": "shallow_water"},
       {"tile_id": "deep_water"},
@@ -677,7 +677,7 @@
       {"tile_id": "grass"},
       {"tile_id": "grass"},
       {"tile_id": "grass"},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
       {"tile_id": "grass"},
       {"tile_id": "shallow_water"},
       {"tile_id": "deep_water"},
@@ -721,7 +721,7 @@
       {"tile_id": "grass"},
       {"tile_id": "grass"},
       {"tile_id": "grass"},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
       {"tile_id": "grass"},
       {"tile_id": "shallow_water"},
       {"tile_id": "shallow_water"},
@@ -759,7 +759,7 @@
       {"tile_id": "grass"},
       {"tile_id": "grass"},
       {"tile_id": "grass"},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
       {"tile_id": "grass"},
       {"tile_id": "grass"},
       {"tile_id": "grass"},
@@ -794,21 +794,21 @@
       {"tile_id": "grass"},
       {"tile_id": "grass"},
       {"tile_id": "grass"},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
-      {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
+      {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}},
       {"tile_id": "sign",
        "tile_data": {
          "text": "Hello,",
-         "ground_tile": {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}}
+         "ground_tile": {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}}
        }
       },
       {"tile_id": "sign",
        "tile_data": {
          "text": "World!",
-         "ground_tile": {"tile_id": "wild_grass", "tile_data": {"patch_id": "0"}}
+         "ground_tile": {"tile_id": "wild_grass", "tile_data": {"patch_id": "1"}}
        }
       },
       {"tile_id": "grass"},
@@ -1501,6 +1501,56 @@
       },
       {
         "species": "vinelette",
+        "min_level": 1,
+        "max_level": 1,
+        "moves": ["soil_slap"],
+        "weight": 1
+      },
+      {
+        "species": null,
+        "min_level": 0,
+        "max_level": 0,
+        "moves": [],
+        "weight": 54
+      }
+    ],
+    "1": [{
+        "species": "aquanima",
+        "min_level": 1,
+        "max_level": 1,
+        "moves": ["soil_slap"],
+        "weight": 1
+      },
+      {
+        "species": "caldergrub",
+        "min_level": 1,
+        "max_level": 1,
+        "moves": ["soil_slap"],
+        "weight": 1
+      },
+      {
+        "species": "drissengan",
+        "min_level": 1,
+        "max_level": 1,
+        "moves": ["soil_slap"],
+        "weight": 1
+      },
+      {
+        "species": "leideblade",
+        "min_level": 1,
+        "max_level": 1,
+        "moves": ["soil_slap"],
+        "weight": 1
+      },
+      {
+        "species": "nailist",
+        "min_level": 1,
+        "max_level": 1,
+        "moves": ["soil_slap"],
+        "weight": 1
+      },
+      {
+        "species": "oilly",
         "min_level": 1,
         "max_level": 1,
         "moves": ["soil_slap"],
