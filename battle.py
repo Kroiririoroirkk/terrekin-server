@@ -272,7 +272,7 @@ class Species(Enum):
         dex=1,
         stam=50
     )
-    CAZADARE = "cazadare", "Cazadare", Stats(
+    VOLADARE = "voladare", "Voladare", Stats(
         hp=10,
         attack=1,
         defense=1,
