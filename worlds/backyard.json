@@ -15,7 +15,7 @@
   "cutscenes": [],
   "patches": {
     "always_spawn": [{
-        "species": "scarpfall",
+        "species": "wickbeam",
         "min_level": 1,
         "max_level": 1,
         "moves": ["soil_slap"],
