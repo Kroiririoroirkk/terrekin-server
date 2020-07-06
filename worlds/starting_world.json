@@ -1428,7 +1428,7 @@
         "I think it's really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really swell.",
         "Don't you agree?",
         ["Yes", "No"],
-        {"0": "Good talk!", "1": "Oh, I guess people have all sorts of opinions..."}
+        {"0": "Good talk!", "1": "Oh... I guess there's room on this planet with people for all sorts of opinions."}
       ]
     },
     {
