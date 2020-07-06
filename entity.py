@@ -1,9 +1,91 @@
 """Defines classes for various entities."""
+import uuid
+
 from collision import block_movement
 from config import Config
 from entitybasic import Entity, register_entity
 from geometry import Direction, Vec
 from util import Util
+
+
+class Dialogue:
+    """Class to track an entity's dialogue."""
+
+    def __init__(self, dialogue, conv_progress=None):
+        """Initialize a Dialogue tracker."""
+        self.dialogue = dialogue
+        self.conv_progress = conv_progress or {}
+
+    @staticmethod
+    def from_json(dialogue_list):
+        """Convert from JSON to a Dialogue object."""
+        try:
+            return Dialogue([
+                {int(k): v for k, v in d.items()}
+                if isinstance(d, dict) else d
+                for d in dialogue_list])
+        except ValueError:
+            return None
+
+    async def send_line(self, ws, entity_uuid, line):
+        """Send a line of dialogue, which can be a string or list."""
+        if isinstance(line, list):
+            await Util.send_dialogue_choices(ws, entity_uuid, line)
+        elif isinstance(line, str):
+            await Util.send_dialogue(ws, entity_uuid, line)
+        else:
+            raise ValueError
+
+    async def on_interact(self, event_ctx, entity):
+        """Send dialogue when player interacts with the entity."""
+        if event_ctx.username in self.conv_progress:
+            self.conv_progress[event_ctx.username] += 1
+            try:
+                await self.send_line(
+                    event_ctx.ws,
+                    entity.uuid,
+                    self.dialogue[self.conv_progress[event_ctx.username]])
+                event_ctx.player.talking_to = entity
+            except IndexError:
+                del self.conv_progress[event_ctx.username]
+                await self.end_dialogue(event_ctx, entity)
+                event_ctx.player.talking_to = None
+            except ValueError:
+                del self.conv_progress[event_ctx.username]
+                await self.on_interact(event_ctx, entity.uuid)
+        else:
+            self.conv_progress[event_ctx.username] = 0
+            await self.send_line(
+                event_ctx.ws,
+                entity.uuid,
+                self.dialogue[self.conv_progress[event_ctx.username]])
+            event_ctx.player.talking_to = entity
+
+    async def on_dialogue_choose(self, event_ctx, entity, choice):
+        """Respond to player choosing dialogue."""
+        if event_ctx.username in self.conv_progress:
+            self.conv_progress[event_ctx.username] += 1
+            try:
+                await self.send_line(
+                    event_ctx.ws,
+                    entity.uuid,
+                    self.dialogue[self.conv_progress[event_ctx.username]].get(
+                        choice))
+                event_ctx.player.talking_to = entity
+            except IndexError:
+                del self.conv_progress[event_ctx.username]
+                await self.end_dialogue(event_ctx, entity)
+                event_ctx.player.talking_to = None
+            except ValueError:
+                self.conv_progress[event_ctx.username] -= 1
+
+    async def end_dialogue(self, event_ctx, entity):
+        """End dialogue and call any handlers."""
+        await Util.send_dialogue_end(event_ctx.ws, entity.uuid)
+        try:
+            await entity.on_dialogue_end(event_ctx)
+        except AttributeError:
+            pass
 
 
 @register_entity("walker")
@@ -13,24 +95,19 @@ class Walker(Entity):
     It walks three blocks to left and three blocks to the right.
     """
 
-    def __init__(self, pos, velocity, facing):
+    def __init__(self, pos, velocity, facing, entity_uuid, dialogue):
         """Initialize the Walker with certain default properties.
 
         Set velocity rightward with the norm of the given velocity.
         Set dialogue.
         Set min_x and max_x to three blocks left and three blocks to the right.
         """
-        super().__init__(pos, velocity, facing)
-        self.speed = velocity.norm()
+        super().__init__(pos, velocity, facing, entity_uuid)
+        self.speed = self.velocity.norm()
         self.velocity = Vec(self.speed, 0)
-        self.min_x = pos.x - Config.BLOCK_WIDTH*3
-        self.max_x = pos.x + Config.BLOCK_WIDTH*3
-        self.dialogue = [
-            "Hi!",
-            "This is dialogue.",
-            f"And this is {'really '*42}long dialogue.",
-        ]
-        self.conv_progress = {}
+        self.min_x = self.pos.x - Config.BLOCK_WIDTH*3
+        self.max_x = self.pos.x + Config.BLOCK_WIDTH*3
+        self.dialogue = dialogue
 
     def update(self, update_ctx):
         """Move and turn if min_x or max_x reached. Check for collision."""
@@ -66,32 +143,33 @@ class Walker(Entity):
     async def on_interact(self, event_ctx):
         """Send dialogue when player interacts with Walker."""
         self.velocity = Vec(0, 0)
-        if event_ctx.username in self.conv_progress:
-            self.conv_progress[event_ctx.username] += 1
-            try:
-                await Util.send_dialogue(
-                    event_ctx.ws, self.uuid,
-                    self.dialogue[self.conv_progress[event_ctx.username]])
-                event_ctx.player.talking_to = self
-            except IndexError:
-                del self.conv_progress[event_ctx.username]
-                await Util.send_dialogue_end(event_ctx.ws, self.uuid)
-                event_ctx.player.talking_to = None
-                if not self.conv_progress:
-                    if self.facing is Direction.LEFT:
-                        self.velocity = Vec(-self.speed, 0)
-                    elif self.facing is Direction.RIGHT:
-                        self.velocity = Vec(self.speed, 0)
-        else:
-            self.conv_progress[event_ctx.username] = 0
-            await Util.send_dialogue(
-                event_ctx.ws, self.uuid,
-                self.dialogue[self.conv_progress[event_ctx.username]])
-            event_ctx.player.talking_to = self
+        await self.dialogue.on_interact(event_ctx, self)
+
+    async def on_dialogue_choose(self, event_ctx, choice):
+        """Respond to player choosing dialogue."""
+        await self.dialogue.on_dialogue_choose(event_ctx, self, choice)
+
+    async def on_dialogue_end(self, event_ctx):
+        """Resume walking when dialogue ends."""
+        del event_ctx  # Unused
+        if self.facing is Direction.LEFT:
+            self.velocity = Vec(-self.speed, 0)
+        elif self.facing is Direction.RIGHT:
+            self.velocity = Vec(self.speed, 0)
 
     def get_bounding_box(self):
         """Walker's bounding box is same as player's."""
         return super().get_bounding_box_of_width(Config.PLAYER_WIDTH)
+
+    @staticmethod
+    def from_json(entity_dict):
+        """Convert a dict representing a JSON object into a Walker."""
+        pos = Vec.from_json(entity_dict["pos"])
+        velocity = Vec.from_json(entity_dict["velocity"])
+        facing = Direction.str_to_direction(entity_dict["facing"])
+        entity_uuid = uuid.UUID(entity_dict["uuid"])
+        dialogue = Dialogue.from_json(entity_dict["dialogue"])
+        return Walker(pos, velocity, facing, entity_uuid, dialogue)
 
 
 @register_entity("stander")
@@ -102,70 +180,34 @@ class Stander(Entity):
     gives an answer based on the player's response.
     """
 
-    def __init__(self, pos, velocity, facing):
+    def __init__(self, pos, velocity, facing, entity_uuid, dialogue):
         """Initialize the Stander with certain default properties.
 
         Set velocity to 0.
         Set dialogue.
         """
-        super().__init__(pos, velocity, facing)
+        super().__init__(pos, velocity, facing, entity_uuid)
         self.velocity = Vec(0, 0)
-        self.dialogue = [
-            "Don't get so close, scum! Do you know who my father is?",
-            ["Yes", "No"],
-            {0: "That makes one of us...", 1: "Me neither..."},
-        ]
-        self.conv_progress = {}
-
-    async def send_line(self, ws, line):
-        """Send a line of dialogue, which can be a string or list."""
-        if isinstance(line, list):
-            await Util.send_dialogue_choices(ws, self.uuid, line)
-        elif isinstance(line, str):
-            await Util.send_dialogue(ws, self.uuid, line)
-        else:
-            raise ValueError
+        self.dialogue = dialogue
 
     async def on_interact(self, event_ctx):
         """Send dialogue when player interacts with Stander."""
-        if event_ctx.username in self.conv_progress:
-            self.conv_progress[event_ctx.username] += 1
-            try:
-                await self.send_line(
-                    event_ctx.ws,
-                    self.dialogue[self.conv_progress[event_ctx.username]])
-                event_ctx.player.talking_to = self
-            except IndexError:
-                del self.conv_progress[event_ctx.username]
-                await Util.send_dialogue_end(event_ctx.ws, self.uuid)
-                event_ctx.player.talking_to = None
-            except ValueError:
-                del self.conv_progress[event_ctx.username]
-                await self.on_interact(event_ctx)
-        else:
-            self.conv_progress[event_ctx.username] = 0
-            await self.send_line(
-                event_ctx.ws,
-                self.dialogue[self.conv_progress[event_ctx.username]])
-            event_ctx.player.talking_to = self
+        await self.dialogue.on_interact(event_ctx, self)
 
     async def on_dialogue_choose(self, event_ctx, choice):
         """Respond to player choosing dialogue."""
-        if event_ctx.username in self.conv_progress:
-            self.conv_progress[event_ctx.username] += 1
-            try:
-                await self.send_line(
-                    event_ctx.ws,
-                    self.dialogue[self.conv_progress[event_ctx.username]].get(
-                        choice))
-                event_ctx.player.talking_to = self
-            except IndexError:
-                del self.conv_progress[event_ctx.username]
-                await Util.send_dialogue_end(event_ctx.ws, self.uuid)
-                event_ctx.player.talking_to = None
-            except ValueError:
-                self.conv_progress[event_ctx.username] -= 1
+        await self.dialogue.on_dialogue_choose(event_ctx, self, choice)
 
     def get_bounding_box(self):
         """Stander's bounding box is same as player's."""
         return super().get_bounding_box_of_width(Config.PLAYER_WIDTH)
+
+    @staticmethod
+    def from_json(entity_dict):
+        """Convert a dict representing a JSON object into a Stander."""
+        pos = Vec.from_json(entity_dict["pos"])
+        velocity = Vec.from_json(entity_dict["velocity"])
+        facing = Direction.str_to_direction(entity_dict["facing"])
+        entity_uuid = uuid.UUID(entity_dict["uuid"])
+        dialogue = Dialogue.from_json(entity_dict["dialogue"])
+        return Stander(pos, velocity, facing, entity_uuid, dialogue)

@@ -48,7 +48,8 @@
       "entity_id": "stander",
       "pos": {"x": 64, "y": 32},
       "velocity": {"x": 0, "y": 0},
-      "facing": "d"
+      "facing": "d",
+      "dialogue": ["This is your home!"]
     }
   ],
   "spawn_points":{

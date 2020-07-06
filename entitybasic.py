@@ -1,10 +1,9 @@
 """Defines the Entity class and register_entity."""
 from collections import namedtuple
 from typing import Any, Dict
-import uuid
 
 from config import Config
-from geometry import BoundingBox, Direction, Vec
+from geometry import BoundingBox, Vec
 from tilecoord import TileCoord
 
 
@@ -30,12 +29,12 @@ EntityEventContext = namedtuple("EntityEventContext", [
 class Entity:
     """The Entity class encompasses things in the game that can move."""
 
-    def __init__(self, pos, velocity, facing):
-        """Initialize entity with randomly generated UUID."""
+    def __init__(self, pos, velocity, facing, entity_uuid):
+        """Initialize entity with information given."""
         self.pos = pos
         self.velocity = velocity
         self.facing = facing
-        self.uuid = uuid.uuid4()
+        self.uuid = entity_uuid
         self.blocks_movement = True
 
     def move(self, offset):
@@ -94,12 +93,7 @@ class Entity:
     def from_json(entity_dict):
         """Convert a dict representing a JSON object into an entity."""
         entity_class = Entity.get_entity_by_id(entity_dict["entity_id"])
-        entity_pos = Vec.from_json(entity_dict["pos"])
-        entity_velocity = Vec.from_json(entity_dict["velocity"])
-        entity_facing = Direction.str_to_direction(entity_dict["facing"])
-        ent = entity_class(entity_pos, entity_velocity, entity_facing)
-        ent.uuid = uuid.UUID(entity_dict["uuid"])
-        return ent
+        return entity_class.from_json(entity_dict)
 
     def to_json(self, is_to_client):
         """Convert an entity to a dict which can be converted to a JSON string.

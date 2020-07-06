@@ -13,7 +13,8 @@ class Player(Entity, Combatant):
 
     def __init__(self, username, pos, velocity, facing, ws, world_id):
         """Initialize player and delete UUID (players don't have UUIDs)."""
-        Entity.__init__(self, pos, velocity, facing)
+        Entity.__init__(self, pos, velocity, facing, None)
+        del self.uuid
         Combatant.__init__(self,
                            Species.HUMAN,
                            level=1,
@@ -22,7 +23,6 @@ class Player(Entity, Combatant):
         self.world_id = world_id
         self.ws = ws
         self.online = True
-        self.uuid = None
         self.talking_to = None
         self.time_of_last_move = 0
 

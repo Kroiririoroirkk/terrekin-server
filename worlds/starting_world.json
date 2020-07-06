@@ -1422,14 +1422,26 @@
       "entity_id": "walker",
       "pos": {"x": 320, "y": 320},
       "velocity": {"x": 80, "y": 0},
-      "facing": "r"
+      "facing": "r",
+      "dialogue": [
+        "I really like walking!",
+        "I think it's really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really swell.",
+        "Don't you agree?",
+        ["Yes", "No"],
+        {"0": "Good talk!", "1": "Oh, I guess people have all sorts of opinions..."}
+      ]
     },
     {
       "uuid": "9b6a02bf0fad4b08b8c1660d19c6c52a",
       "entity_id": "stander",
       "pos": {"x": 288, "y": 368},
       "velocity": {"x": 0, "y": 0},
-      "facing": "d"
+      "facing": "d",
+      "dialogue": [
+        "Don't get so close, scum! Do you know who my father is?",
+        ["Yes", "No"],
+        {"0": "That makes one of us...", "1": "Me neither..."}
+      ]
     }
   ],
   "spawn_points": {
