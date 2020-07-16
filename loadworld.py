@@ -1,5 +1,6 @@
 """Defines functions to load worlds from file."""
 import json
+import os
 
 from world import World
 
@@ -16,11 +17,7 @@ def load_file(world_id):
 
 
 def load_worlds():
-    """Register the required worlds."""
-    load_file("starting_world")
-    load_file("second_world")
-    load_file("player_home")
-    load_file("backyard")
-    load_file("maze")
-    load_file("lava_maze")
-    load_file("sam2")
+    """Register all worlds in the folder."""
+    with os.scandir("worlds") as files:
+        for entry in files:
+            load_file(entry.name[:-5])

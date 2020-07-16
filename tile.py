@@ -1,7 +1,7 @@
 """Defines classes for various tiles."""
 import random
 
-from battle import RandomMoveAICombatant, Move, Species
+from battle import RandomMoveAICombatant
 from tilebasic import (
     Tile, TilePlus, TileMetadata,
     register_tile, register_tile_plus)
@@ -205,6 +205,266 @@ class IndoorWall(Tile):
 @register_tile("barrier")
 class Barrier(Tile):
     """Class for the barrier tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("carpet")
+class Carpet(Tile):
+    """Class for the carpet tile."""
+
+
+@register_tile("rug")
+class Rug(Tile):
+    """Class for the rug tile."""
+
+
+@register_tile("table")
+class Table(Tile):
+    """Class for the table tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("chair")
+class Chair(Tile):
+    """Class for the chair tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("knickknack_shelf")
+class KnickknackShelf(Tile):
+    """Class for the knickknack shelf tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("left_door")
+class LeftDoor(Tile):
+    """Class for the left door tile."""
+
+
+@register_tile("right_door")
+class RightDoor(Tile):
+    """Class for the right door tile."""
+
+
+@register_tile("metal_left_door")
+class MetalLeftDoor(Tile):
+    """Class for the metal left door tile."""
+
+
+@register_tile("metal_right_door")
+class MetalRightDoor(Tile):
+    """Class for the metal right door tile."""
+
+
+@register_tile("countertop")
+class Countertop(Tile):
+    """Class for the countertop tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("stair_top_ascending")
+class StairTopAscending(Tile):
+    """Class for the stair (top, ascending) tile."""
+
+
+@register_tile("stair_bottom_ascending")
+class StairBottomAscending(Tile):
+    """Class for the stair (bottom, ascending) tile."""
+
+
+@register_tile("stair_top_descending")
+class StairTopDescending(Tile):
+    """Class for the stair (top, descending) tile."""
+
+
+@register_tile("stair_bottom_descending")
+class StairBottomDescending(Tile):
+    """Class for the stair (bottom, descending) tile."""
+
+
+@register_tile("couch")
+class Couch(Tile):
+    """Class for the couch tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("bed")
+class Bed(Tile):
+    """Class for the bed tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("lamp_nightstand")
+class LampNightstand(Tile):
+    """Class for the lamp nightstand tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("desk")
+class Desk(Tile):
+    """Class for the desk tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("bookcase")
+class Bookcase(Tile):
+    """Class for the bookcase tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("hung_up_clothes")
+class HungUpClothes(Tile):
+    """Class for the hung-up clothes tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("pile_of_clothes")
+class PileOfClothes(Tile):
+    """Class for the pile of clothes tile."""
+
+
+@register_tile("player_roof")
+class PlayerRoof(Tile):
+    """Class for the player roof tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("shop_roof")
+class ShopRoof(Tile):
+    """Class for the shop roof tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("army_roof")
+class ArmyRoof(Tile):
+    """Class for the army roof tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("university_roof")
+class UniversityRoof(Tile):
+    """Class for the university roof tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("university_hospital_roof")
+class UniversityHospitalRoof(Tile):
+    """Class for the university hospital roof tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("roof")
+class Roof(Tile):
+    """Class for the roof tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("well")
+class Well(Tile):
+    """Class for the well tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("pavement")
+class Pavement(Tile):
+    """Class for the pavement tile."""
+
+
+@register_tile("construction")
+class Construction(Tile):
+    """Class for the construction tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("trees")
+class Trees(Tile):
+    """Class for the trees tile."""
+
+    def __init__(self):
+        """Initialize with the ability to block player movement."""
+        super().__init__()
+        self.blocks_movement = True
+
+
+@register_tile("garden")
+class Garden(Tile):
+    """Class for the garden tile."""
 
     def __init__(self):
         """Initialize with the ability to block player movement."""
