@@ -2,11 +2,12 @@
 import random
 
 from battle import RandomMoveAICombatant
+from geometry import Direction
+from teleport import teleport
 from tilebasic import (
     Tile, TilePlus, TileMetadata,
     register_tile, register_tile_plus)
 from util import Util
-from world import World
 
 
 @register_tile("grass")
@@ -110,14 +111,9 @@ class Portal(TilePlus):
 
     async def on_move_on(self, event_ctx, player_start_pos):
         """Teleport players that move into the portal."""
-        world_id = self.data.world_id
-        world = World.get_world_by_id(world_id)
-        spawn_id = self.data.spawn_id
-        event_ctx.player.world_id = world_id
-        event_ctx.player.pos = world.spawn_points[spawn_id].to_spawn_pos()
-        await Util.send_world(event_ctx.ws, world, event_ctx.player.pos)
-        await Util.send_players(
-            event_ctx.game, event_ctx.ws, event_ctx.username, world_id)
+        await teleport(event_ctx.game, event_ctx.ws, event_ctx.username,
+                       event_ctx.player, self.data.world_id,
+                       self.data.spawn_id)
 
 
 class SignData(TileMetadata):
@@ -232,13 +228,37 @@ class Table(Tile):
         self.blocks_movement = True
 
 
-@register_tile("chair")
-class Chair(Tile):
+class ChairData(TileMetadata):
+    """Stores the direction and ground tile of a chair tile."""
+
+    def __init__(self, facing, ground_tile):
+        """Initialize facing and ground_tile."""
+        super().__init__()
+        self.facing = facing
+        self.ground_tile = ground_tile
+        self.send_to_client = ["facing", "ground_tile"]
+
+    @staticmethod
+    def from_json(data):
+        """Convert a dict representing a JSON object into ChairData."""
+        return ChairData(Direction.str_to_direction(data["facing"]),
+                         Tile.from_json(data["ground_tile"]))
+
+    def to_json(self, is_to_client):
+        """Serialize to JSON."""
+        return {
+            "facing": self.facing.direction_to_str(),
+            "ground_tile": self.ground_tile.to_json(is_to_client)
+        }
+
+
+@register_tile_plus("chair", ChairData)
+class Chair(TilePlus):
     """Class for the chair tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
@@ -252,24 +272,48 @@ class KnickknackShelf(Tile):
         self.blocks_movement = True
 
 
-@register_tile("left_door")
-class LeftDoor(Tile):
+@register_tile_plus("left_door", PortalData)
+class LeftDoor(TilePlus):
     """Class for the left door tile."""
 
+    async def on_move_on(self, event_ctx, player_start_pos):
+        """Teleport players that move into the portal."""
+        await teleport(event_ctx.game, event_ctx.ws, event_ctx.username,
+                       event_ctx.player, self.data.world_id,
+                       self.data.spawn_id)
 
-@register_tile("right_door")
-class RightDoor(Tile):
+
+@register_tile_plus("right_door", PortalData)
+class RightDoor(TilePlus):
     """Class for the right door tile."""
 
+    async def on_move_on(self, event_ctx, player_start_pos):
+        """Teleport players that move into the portal."""
+        await teleport(event_ctx.game, event_ctx.ws, event_ctx.username,
+                       event_ctx.player, self.data.world_id,
+                       self.data.spawn_id)
 
-@register_tile("metal_left_door")
-class MetalLeftDoor(Tile):
+
+@register_tile_plus("metal_left_door", PortalData)
+class MetalLeftDoor(TilePlus):
     """Class for the metal left door tile."""
 
+    async def on_move_on(self, event_ctx, player_start_pos):
+        """Teleport players that move into the portal."""
+        await teleport(event_ctx.game, event_ctx.ws, event_ctx.username,
+                       event_ctx.player, self.data.world_id,
+                       self.data.spawn_id)
 
-@register_tile("metal_right_door")
+
+@register_tile_plus("metal_right_door", PortalData)
 class MetalRightDoor(Tile):
     """Class for the metal right door tile."""
+
+    async def on_move_on(self, event_ctx, player_start_pos):
+        """Teleport players that move into the portal."""
+        await teleport(event_ctx.game, event_ctx.ws, event_ctx.username,
+                       event_ctx.player, self.data.world_id,
+                       self.data.spawn_id)
 
 
 @register_tile("countertop")
@@ -282,9 +326,37 @@ class Countertop(Tile):
         self.blocks_movement = True
 
 
-@register_tile("stair_top_ascending")
+class StairData(TileMetadata):
+    """Stores information about the destination of a stair tile."""
+
+    def __init__(self, world_id, spawn_id):
+        """Initialize with destination world_id and spawn_id."""
+        super().__init__()
+        self.world_id = world_id
+        self.spawn_id = spawn_id
+
+    @staticmethod
+    def from_json(data):
+        """Convert a dict representing a JSON object into StairData."""
+        return StairData(data["world_id"], data["spawn_id"])
+
+    def to_json(self, is_to_client):
+        """Serialize to JSON."""
+        return {
+            "world_id": self.world_id,
+            "spawn_id": self.spawn_id
+        }
+
+
+@register_tile_plus("stair_top_ascending", StairData)
 class StairTopAscending(Tile):
     """Class for the stair (top, ascending) tile."""
+
+    async def on_move_on(self, event_ctx, player_start_pos):
+        """Teleport players that move into the portal."""
+        await teleport(event_ctx.game, event_ctx.ws, event_ctx.username,
+                       event_ctx.player, self.data.world_id,
+                       self.data.spawn_id)
 
 
 @register_tile("stair_bottom_ascending")
@@ -297,9 +369,15 @@ class StairTopDescending(Tile):
     """Class for the stair (top, descending) tile."""
 
 
-@register_tile("stair_bottom_descending")
+@register_tile_plus("stair_bottom_descending", StairData)
 class StairBottomDescending(Tile):
     """Class for the stair (bottom, descending) tile."""
+
+    async def on_move_on(self, event_ctx, player_start_pos):
+        """Teleport players that move into the portal."""
+        await teleport(event_ctx.game, event_ctx.ws, event_ctx.username,
+                       event_ctx.player, self.data.world_id,
+                       self.data.spawn_id)
 
 
 @register_tile("couch")
