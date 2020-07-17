@@ -349,7 +349,7 @@ class StairData(TileMetadata):
 
 
 @register_tile_plus("stair_top_ascending", StairData)
-class StairTopAscending(Tile):
+class StairTopAscending(TilePlus):
     """Class for the stair (top, ascending) tile."""
 
     async def on_move_on(self, event_ctx, player_start_pos):
@@ -370,7 +370,7 @@ class StairTopDescending(Tile):
 
 
 @register_tile_plus("stair_bottom_descending", StairData)
-class StairBottomDescending(Tile):
+class StairBottomDescending(TilePlus):
     """Class for the stair (bottom, descending) tile."""
 
     async def on_move_on(self, event_ctx, player_start_pos):
