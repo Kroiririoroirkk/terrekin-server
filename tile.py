@@ -10,6 +10,25 @@ from tilebasic import (
 from util import Util
 
 
+class GroundData(TileMetadata):
+    """Stores information about a background of a tile."""
+
+    def __init__(self, ground_tile):
+        """Initialize with ground tile."""
+        super().__init__()
+        self.ground_tile = ground_tile
+        self.send_to_client = ["ground_tile"]
+
+    @staticmethod
+    def from_json(data):
+        """Convert a dict representing a JSON object into PortalData."""
+        return GroundData(Tile.from_json(data["ground_tile"]))
+
+    def to_json(self, is_to_client):
+        """Serialize to JSON."""
+        return {"ground_tile": self.ground_tile.to_json(is_to_client)}
+
+
 @register_tile("grass")
 class Grass(Tile):
     """Class for the grass tile."""
@@ -79,29 +98,27 @@ class Wall(Tile):
         self.blocks_movement = True
 
 
-class PortalData(TileMetadata):
+class PortalData(GroundData):
     """Stores information about the destination of a portal tile."""
 
     def __init__(self, world_id, spawn_id, ground_tile):
         """Initialize with destination world_id and spawn_id."""
-        super().__init__()
+        super().__init__(ground_tile)
         self.world_id = world_id
         self.spawn_id = spawn_id
-        self.ground_tile = ground_tile
-        self.send_to_client = ["ground_tile"]
 
     @staticmethod
     def from_json(data):
         """Convert a dict representing a JSON object into PortalData."""
         return PortalData(data["world_id"], data["spawn_id"],
-                          Tile.from_json(data["ground_tile"]))
+                          GroundData.from_json(data).ground_tile)
 
     def to_json(self, is_to_client):
         """Serialize to JSON."""
         return {
             "world_id": self.world_id,
             "spawn_id": self.spawn_id,
-            "ground_tile": self.ground_tile.to_json(is_to_client)
+            **super().to_json(is_to_client)
         }
 
 
@@ -116,26 +133,24 @@ class Portal(TilePlus):
                        self.data.spawn_id)
 
 
-class SignData(TileMetadata):
+class SignData(GroundData):
     """Stores information about the text and ground tile of a sign tile."""
 
     def __init__(self, text, ground_tile):
         """Initialize and flag ground_tile as info sent to the client."""
-        super().__init__()
+        super().__init__(ground_tile)
         self.text = text
-        self.ground_tile = ground_tile
-        self.send_to_client = ["ground_tile"]
 
     @staticmethod
     def from_json(data):
         """Convert a dict representing a JSON object into SignData."""
-        return SignData(data["text"], Tile.from_json(data["ground_tile"]))
+        return SignData(data["text"], GroundData.from_json(data).ground_tile)
 
     def to_json(self, is_to_client):
         """Serialize to JSON."""
         return {
             "text": self.text,
-            "ground_tile": self.ground_tile.to_json(is_to_client)
+            **super().to_json(is_to_client)
         }
 
 
@@ -228,27 +243,26 @@ class Table(Tile):
         self.blocks_movement = True
 
 
-class ChairData(TileMetadata):
+class ChairData(GroundData):
     """Stores the direction and ground tile of a chair tile."""
 
     def __init__(self, facing, ground_tile):
         """Initialize facing and ground_tile."""
-        super().__init__()
+        super().__init__(ground_tile)
         self.facing = facing
-        self.ground_tile = ground_tile
-        self.send_to_client = ["facing", "ground_tile"]
+        self.send_to_client.append("facing")
 
     @staticmethod
     def from_json(data):
         """Convert a dict representing a JSON object into ChairData."""
         return ChairData(Direction.str_to_direction(data["facing"]),
-                         Tile.from_json(data["ground_tile"]))
+                         GroundData.from_json(data).ground_tile)
 
     def to_json(self, is_to_client):
         """Serialize to JSON."""
         return {
             "facing": self.facing.direction_to_str(),
-            "ground_tile": self.ground_tile.to_json(is_to_client)
+            **super().to_json(is_to_client)
         }
 
 
@@ -380,23 +394,23 @@ class StairBottomDescending(TilePlus):
                        self.data.spawn_id)
 
 
-@register_tile("couch")
-class Couch(Tile):
+@register_tile_plus("couch", GroundData)
+class Couch(TilePlus):
     """Class for the couch tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
-@register_tile("bed")
-class Bed(Tile):
+@register_tile_plus("bed", GroundData)
+class Bed(TilePlus):
     """Class for the bed tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
