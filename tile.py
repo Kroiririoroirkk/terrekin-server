@@ -233,13 +233,13 @@ class Rug(Tile):
     """Class for the rug tile."""
 
 
-@register_tile("table")
-class Table(Tile):
+@register_tile_plus("table", GroundData)
+class Table(TilePlus):
     """Class for the table tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
