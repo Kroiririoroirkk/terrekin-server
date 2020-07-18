@@ -555,13 +555,13 @@ class Construction(Tile):
         self.blocks_movement = True
 
 
-@register_tile("trees")
-class Trees(Tile):
+@register_tile_plus("trees", GroundData)
+class Trees(TilePlus):
     """Class for the trees tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
