@@ -320,8 +320,19 @@ class MetalLeftDoor(TilePlus):
 
 
 @register_tile_plus("metal_right_door", PortalData)
-class MetalRightDoor(Tile):
+class MetalRightDoor(TilePlus):
     """Class for the metal right door tile."""
+
+    async def on_move_on(self, event_ctx, player_start_pos):
+        """Teleport players that move into the portal."""
+        await teleport(event_ctx.game, event_ctx.ws, event_ctx.username,
+                       event_ctx.player, self.data.world_id,
+                       self.data.spawn_id)
+
+
+@register_tile_plus("mat", PortalData)
+class Mat(TilePlus):
+    """Class for the mat tile."""
 
     async def on_move_on(self, event_ctx, player_start_pos):
         """Teleport players that move into the portal."""
