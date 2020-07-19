@@ -21,7 +21,7 @@ class GroundData(TileMetadata):
 
     @staticmethod
     def from_json(data):
-        """Convert a dict representing a JSON object into PortalData."""
+        """Convert a dict representing a JSON object into GroundData."""
         return GroundData(Tile.from_json(data["ground_tile"]))
 
     def to_json(self, is_to_client):
@@ -228,8 +228,27 @@ class Carpet(Tile):
     """Class for the carpet tile."""
 
 
-@register_tile("rug")
-class Rug(Tile):
+class RugData(TileMetadata):
+    """Stores information about the pattern of a rug tile."""
+
+    def __init__(self, pattern):
+        """Initialize with pattern."""
+        super().__init__()
+        self.pattern = pattern
+        self.send_to_client = ["pattern"]
+
+    @staticmethod
+    def from_json(data):
+        """Convert a dict representing a JSON object into RugData."""
+        return RugData(data["pattern"])
+
+    def to_json(self, is_to_client):
+        """Serialize to JSON."""
+        return {"pattern": self.pattern}
+
+
+@register_tile_plus("rug", RugData)
+class Rug(TilePlus):
     """Class for the rug tile."""
 
 
