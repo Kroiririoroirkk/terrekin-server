@@ -295,13 +295,13 @@ class Chair(TilePlus):
         self.blocks_movement = True
 
 
-@register_tile("knickknack_shelf")
-class KnickknackShelf(Tile):
+@register_tile_plus("knickknack_shelf", GroundData)
+class KnickknackShelf(TilePlus):
     """Class for the knickknack shelf tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
