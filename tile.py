@@ -295,16 +295,6 @@ class Chair(TilePlus):
         self.blocks_movement = True
 
 
-@register_tile_plus("knickknack_shelf", GroundData)
-class KnickknackShelf(TilePlus):
-    """Class for the knickknack shelf tile."""
-
-    def __init__(self, data):
-        """Initialize with the ability to block player movement."""
-        super().__init__(data)
-        self.blocks_movement = True
-
-
 @register_tile_plus("left_door", PortalData)
 class LeftDoor(TilePlus):
     """Class for the left door tile."""
@@ -464,13 +454,13 @@ class Desk(Tile):
         self.blocks_movement = True
 
 
-@register_tile("bookcase")
-class Bookcase(Tile):
+@register_tile_plus("bookcase", ChairData)
+class Bookcase(TilePlus):
     """Class for the bookcase tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
