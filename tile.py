@@ -539,13 +539,13 @@ class Roof(Tile):
         self.blocks_movement = True
 
 
-@register_tile("well")
-class Well(Tile):
+@register_tile_plus("well", GroundData)
+class Well(TilePlus):
     """Class for the well tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
