@@ -554,13 +554,13 @@ class Pavement(Tile):
     """Class for the pavement tile."""
 
 
-@register_tile("construction")
-class Construction(Tile):
+@register_tile_plus("construction", GroundData)
+class Construction(TilePlus):
     """Class for the construction tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
