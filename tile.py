@@ -350,13 +350,13 @@ class Mat(TilePlus):
                        self.data.spawn_id)
 
 
-@register_tile("countertop")
-class Countertop(Tile):
+@register_tile_plus("countertop", GroundData)
+class Countertop(TilePlus):
     """Class for the countertop tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
