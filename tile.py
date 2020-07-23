@@ -500,9 +500,29 @@ class PlayerRoof(TilePlus):
         self.blocks_movement = True
 
 
-@register_tile_plus("shop_roof", GroundData)
-class ShopRoof(TilePlus):
-    """Class for the shop roof tile."""
+@register_tile_plus("shop_roof_armor", GroundData)
+class ShopRoofArmor(TilePlus):
+    """Class for the shop roof (armor) tile."""
+
+    def __init__(self, data):
+        """Initialize with the ability to block player movement."""
+        super().__init__(data)
+        self.blocks_movement = True
+
+
+@register_tile_plus("shop_roof_weapon", GroundData)
+class ShopRoofWeapon(TilePlus):
+    """Class for the shop roof (weapon) tile."""
+
+    def __init__(self, data):
+        """Initialize with the ability to block player movement."""
+        super().__init__(data)
+        self.blocks_movement = True
+
+
+@register_tile_plus("shop_roof_item", GroundData)
+class ShopRoofItem(TilePlus):
+    """Class for the shop roof (item) tile."""
 
     def __init__(self, data):
         """Initialize with the ability to block player movement."""
