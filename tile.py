@@ -133,6 +133,17 @@ class Portal(TilePlus):
                        self.data.spawn_id)
 
 
+@register_tile_plus("invisible_portal", PortalData)
+class InvisiblePortal(TilePlus):
+    """Class for the invisible portal tile."""
+
+    async def on_move_on(self, event_ctx, player_start_pos):
+        """Teleport players that move into the portal."""
+        await teleport(event_ctx.game, event_ctx.ws, event_ctx.username,
+                       event_ctx.player, self.data.world_id,
+                       self.data.spawn_id)
+
+
 class SignData(GroundData):
     """Stores information about the text and ground tile of a sign tile."""
 
