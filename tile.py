@@ -479,63 +479,53 @@ class PileOfClothes(Tile):
     """Class for the pile of clothes tile."""
 
 
-@register_tile("player_roof")
-class PlayerRoof(Tile):
+@register_tile_plus("player_roof", GroundData)
+class PlayerRoof(TilePlus):
     """Class for the player roof tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
-@register_tile("shop_roof")
-class ShopRoof(Tile):
+@register_tile_plus("shop_roof", GroundData)
+class ShopRoof(TilePlus):
     """Class for the shop roof tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
-@register_tile("army_roof")
-class ArmyRoof(Tile):
+@register_tile_plus("army_roof", GroundData)
+class ArmyRoof(TilePlus):
     """Class for the army roof tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
-@register_tile("university_roof")
-class UniversityRoof(Tile):
+@register_tile_plus("university_roof", GroundData)
+class UniversityRoof(TilePlus):
     """Class for the university roof tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
-@register_tile("university_hospital_roof")
-class UniversityHospitalRoof(Tile):
-    """Class for the university hospital roof tile."""
-
-    def __init__(self):
-        """Initialize with the ability to block player movement."""
-        super().__init__()
-        self.blocks_movement = True
-
-
-@register_tile("roof")
-class Roof(Tile):
+@register_tile_plus("roof", GroundData)
+class Roof(TilePlus):
     """Class for the roof tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
