@@ -235,6 +235,11 @@ async def update_loop():
                     game=running_game,
                     world=world,
                     dt=dt))
+        for player in running_game.players:
+            player.update(EntityUpdateContext(
+                game=running_game,
+                world=World.get_world_by_id(player.world_id),
+                dt=dt))
         await asyncio.sleep(Config.UPDATE_DT)
 
 start_server = websockets.serve(run, "0.0.0.0", Config.WSPORT)

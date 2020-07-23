@@ -25,6 +25,13 @@ class Player(Entity, Combatant):
         self.online = True
         self.talking_to = None
         self.time_of_last_move = 0
+        self.portal_cooldown = 0
+
+    def update(self, update_ctx):
+        """Update portal cooldown."""
+        super().update(update_ctx)
+        self.portal_cooldown -= update_ctx.dt
+        self.portal_cooldown = max(0, self.portal_cooldown)
 
     def get_entities_can_interact(self, world):
         """Get the entities the player can interact with.

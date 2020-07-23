@@ -17,6 +17,8 @@ moves. Otherwise, they are considered a single move.
 
 UPDATE_DT: Amount of seconds between entity-updating calls.
 This is a lower bound.
+
+PORTAL_COOLDOWN_DT: Amount of seconds before portal transports.
 """
 
 
@@ -30,3 +32,4 @@ class Config:
     SPEED_MULTIPLIER = 2
     MAX_MOVE_DT = 0.1
     UPDATE_DT = 0.1
+    PORTAL_COOLDOWN_DT = 0.2
