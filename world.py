@@ -63,12 +63,12 @@ class World:
         except IndexError:
             return Empty()
 
-    def get_entity(self, uuid):
-        """Get the entity with the given UUID."""
+    def get_entity(self, name):
+        """Get the entity with the given name."""
         try:
             return next(
                 entity for entity in self.entities
-                if entity.uuid == uuid)
+                if entity.name == name)
         except StopIteration:
             raise ValueError
 

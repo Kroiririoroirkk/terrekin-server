@@ -1,6 +1,4 @@
 """Defines classes for various entities."""
-import uuid
-
 from collision import block_movement
 from config import Config
 from entitybasic import Entity, register_entity
@@ -27,12 +25,12 @@ class Dialogue:
         except ValueError:
             return None
 
-    async def send_line(self, ws, entity_uuid, line):
+    async def send_line(self, ws, entity_name, line):
         """Send a line of dialogue, which can be a string or list."""
         if isinstance(line, list):
-            await Util.send_dialogue_choices(ws, entity_uuid, line)
+            await Util.send_dialogue_choices(ws, entity_name, line)
         elif isinstance(line, str):
-            await Util.send_dialogue(ws, entity_uuid, line)
+            await Util.send_dialogue(ws, entity_name, line)
         else:
             raise ValueError
 
@@ -43,7 +41,7 @@ class Dialogue:
             try:
                 await self.send_line(
                     event_ctx.ws,
-                    entity.uuid,
+                    entity.name,
                     self.dialogue[self.conv_progress[event_ctx.username]])
                 event_ctx.player.talking_to = entity
             except IndexError:
@@ -52,12 +50,12 @@ class Dialogue:
                 event_ctx.player.talking_to = None
             except ValueError:
                 del self.conv_progress[event_ctx.username]
-                await self.on_interact(event_ctx, entity.uuid)
+                await self.on_interact(event_ctx, entity.name)
         else:
             self.conv_progress[event_ctx.username] = 0
             await self.send_line(
                 event_ctx.ws,
-                entity.uuid,
+                entity.name,
                 self.dialogue[self.conv_progress[event_ctx.username]])
             event_ctx.player.talking_to = entity
 
@@ -68,7 +66,7 @@ class Dialogue:
             try:
                 await self.send_line(
                     event_ctx.ws,
-                    entity.uuid,
+                    entity.name,
                     self.dialogue[self.conv_progress[event_ctx.username]].get(
                         choice))
                 event_ctx.player.talking_to = entity
@@ -81,7 +79,7 @@ class Dialogue:
 
     async def end_dialogue(self, event_ctx, entity):
         """End dialogue and call any handlers."""
-        await Util.send_dialogue_end(event_ctx.ws, entity.uuid)
+        await Util.send_dialogue_end(event_ctx.ws, entity.name)
         try:
             await entity.on_dialogue_end(event_ctx)
         except AttributeError:
@@ -95,14 +93,14 @@ class Walker(Entity):
     It walks three blocks to left and three blocks to the right.
     """
 
-    def __init__(self, pos, velocity, facing, entity_uuid, dialogue):
+    def __init__(self, pos, velocity, facing, name, dialogue):
         """Initialize the Walker with certain default properties.
 
         Set velocity rightward with the norm of the given velocity.
         Set dialogue.
         Set min_x and max_x to three blocks left and three blocks to the right.
         """
-        super().__init__(pos, velocity, facing, entity_uuid)
+        super().__init__(pos, velocity, facing, name)
         self.speed = self.velocity.norm()
         self.velocity = Vec(self.speed, 0)
         self.min_x = self.pos.x - Config.BLOCK_WIDTH*3
@@ -167,9 +165,9 @@ class Walker(Entity):
         pos = Vec.from_json(entity_dict["pos"])
         velocity = Vec.from_json(entity_dict["velocity"])
         facing = Direction.str_to_direction(entity_dict["facing"])
-        entity_uuid = uuid.UUID(entity_dict["uuid"])
+        name = entity_dict["name"]
         dialogue = Dialogue.from_json(entity_dict["dialogue"])
-        return Walker(pos, velocity, facing, entity_uuid, dialogue)
+        return Walker(pos, velocity, facing, name, dialogue)
 
 
 @register_entity("stander")
@@ -180,13 +178,13 @@ class Stander(Entity):
     gives an answer based on the player's response.
     """
 
-    def __init__(self, pos, velocity, facing, entity_uuid, dialogue):
+    def __init__(self, pos, velocity, facing, name, dialogue):
         """Initialize the Stander with certain default properties.
 
         Set velocity to 0.
         Set dialogue.
         """
-        super().__init__(pos, velocity, facing, entity_uuid)
+        super().__init__(pos, velocity, facing, name)
         self.velocity = Vec(0, 0)
         self.dialogue = dialogue
 
@@ -208,6 +206,6 @@ class Stander(Entity):
         pos = Vec.from_json(entity_dict["pos"])
         velocity = Vec.from_json(entity_dict["velocity"])
         facing = Direction.str_to_direction(entity_dict["facing"])
-        entity_uuid = uuid.UUID(entity_dict["uuid"])
+        name = entity_dict["name"]
         dialogue = Dialogue.from_json(entity_dict["dialogue"])
-        return Stander(pos, velocity, facing, entity_uuid, dialogue)
+        return Stander(pos, velocity, facing, name, dialogue)

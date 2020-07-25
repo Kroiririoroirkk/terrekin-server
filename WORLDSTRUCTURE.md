@@ -2,7 +2,7 @@
 
 Worlds are stored as JSON. Two different formats are used.
 
-## Format for saving to file (this is version 0.3.0):
+## Format for saving to file (this is version 0.4.0):
 ```json
 {
   "$schema": "http://json-schema.org/draft/2019-09/schema#",
@@ -37,7 +37,7 @@ Worlds are stored as JSON. Two different formats are used.
     "entity": {
       "type": "object",
       "properties": {
-        "uuid": {"type": "string"},
+        "name": {"type": "string"},
         "entity_id": {
           "type": "string",
           "$comment": "Should be snake_case"
@@ -46,7 +46,7 @@ Worlds are stored as JSON. Two different formats are used.
         "velocity": {"$ref": "#/definitions/vec2"},
         "facing": {"$ref": "#/definitions/direction"}
       },
-      "required": ["uuid", "entity_id", "pos", "velocity", "facing"]
+      "required": ["name", "entity_id", "pos", "velocity", "facing"]
     },
     "spawn_point": {
       "type": "object",
@@ -68,9 +68,9 @@ Worlds are stored as JSON. Two different formats are used.
         },
         {
           "scene_type": {"const": "move"},
-          "uuid": {
+          "entity_name": {
             "type": "string",
-            "$comment": "UUID of the entity to be moved."
+            "$comment": "Name of the entity to be moved."
           },
           "move_destination": {
             "$ref": "#/definitions/vec2",
@@ -83,9 +83,9 @@ Worlds are stored as JSON. Two different formats are used.
         },
         {
           "scene_type": {"const": "dialogue"},
-          "uuid": {
+          "entity_name": {
             "type": "string",
-            "$comment": "UUID of the entity that is talking."
+            "$comment": "Name of the entity that is talking."
           },
           "dialogue": {"type": "string"}
         }
@@ -109,7 +109,7 @@ Worlds are stored as JSON. Two different formats are used.
   },
   "properties": {
     "version": {
-      "const": "0.3.0"
+      "const": "0.4.0"
     },
     "tiles": {
       "type": "array",
@@ -143,7 +143,7 @@ Worlds are stored as JSON. Two different formats are used.
 }
 ```
 
-## Format for transmission to client (this is version 0.2.0):
+## Format for transmission to client (this is version 0.3.0):
 ```json
 {
   "$schema": "http://json-schema.org/draft/2019-09/schema#",
@@ -177,7 +177,7 @@ Worlds are stored as JSON. Two different formats are used.
     "entity": {
       "type": "object",
       "properties": {
-        "uuid": {"type": "string"},
+        "name": {"type": "string"},
         "entity_id": {
           "type": "string",
           "$comment": "Should be snake_case"
@@ -186,7 +186,7 @@ Worlds are stored as JSON. Two different formats are used.
         "velocity": {"$ref": "#/definitions/vec2"},
         "facing": {"$ref": "#/definitions/direction"}
       },
-      "required": ["uuid", "entity_id", "pos", "velocity", "facing"]
+      "required": ["name", "entity_id", "pos", "velocity", "facing"]
     },
     "cutscene": {
       "type": "object",
@@ -200,9 +200,9 @@ Worlds are stored as JSON. Two different formats are used.
         },
         {
           "scene_type": {"const": "move"},
-          "uuid": {
+          "entity_name": {
             "type": "string",
-            "$comment": "UUID of the entity to be moved."
+            "$comment": "Name of the entity to be moved."
           },
           "move_destination": {
             "$ref": "#/definitions/vec2",
@@ -215,9 +215,9 @@ Worlds are stored as JSON. Two different formats are used.
         },
         {
           "scene_type": {"const": "dialogue"},
-          "uuid": {
+          "entity_name": {
             "type": "string",
-            "$comment": "UUID of the entity that is talking."
+            "$comment": "Name of the entity that is talking."
           },
           "dialogue": {"type": "string"}
         }
@@ -227,7 +227,7 @@ Worlds are stored as JSON. Two different formats are used.
   "type": "object",
   "properties": {
     "version": {
-      "const": "0.2.0"
+      "const": "0.3.0"
     },
     "tiles": {
       "type": "array",

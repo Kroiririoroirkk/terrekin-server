@@ -40,9 +40,9 @@ This message tells the server that the player wishes to interact, e.g. with a si
 
 ### dialoguechoose
 
-Parameters (1): `uuid`, `choice`.
+Parameters (1): `entity_name`, `choice`.
 
-This message should be sent after a [dialoguechoice](#dialoguechoice) message. It indicates which option the client has chosen to say. The parameter `uuid` is the UUID of the entity with which the player is talking. The parameter `choice` is a zero-indexed number (i.e. to pick the first option, the client should send `0`) telling the server which option the client has picked, out of the options given by the [dialoguechoice](#dialoguechoice) message.
+This message should be sent after a [dialoguechoice](#dialoguechoice) message. It indicates which option the client has chosen to say. The parameter `entity_name` is the name of the entity with which the player is talking. The parameter `choice` is a zero-indexed number (i.e. to pick the first option, the client should send `0`) telling the server which option the client has picked, out of the options given by the [dialoguechoice](#dialoguechoice) message.
 
 ### getupdates
 
@@ -90,21 +90,21 @@ This message is sent in response to the [getplayers](#getplayers) message. For e
 
 ### dialogue
 
-Parameters (1): `uuid`, `dialogue_text`
+Parameters (1): `entity_name`, `dialogue_text`
 
-This is one of three possible messages sent when the player interacts with an NPC with dialogue lines (possibly in response to the [interact](#interact) message). It indicates that the NPC with UUID `uuid` has spoke the text given in `dialogue_text`. The `dialogue_text` parameter gives a line of the NPC's dialogue. Note that `dialogue_text` may contain `|` characters.
+This is one of three possible messages sent when the player interacts with an NPC with dialogue lines (possibly in response to the [interact](#interact) message). It indicates that the NPC with name `entity_name` has spoke the text given in `dialogue_text`. The `dialogue_text` parameter gives a line of the NPC's dialogue. Note that `dialogue_text` may contain `|` characters.
 
 ### dialoguechoice
 
-Parameters (Variable number, given by number of choices plus one): `uuid`, `choice1`, `choice2`, etc.
+Parameters (Variable number, given by number of choices plus one): `entity_name`, `choice1`, `choice2`, etc.
 
-This is one of three possible messages sent when the player interacts with an NPC with dialogue lines (possibly in response to the [interact](#interact) message). It indicates that the player can respond to the NPC with UUID `uuid` with either `choice1`, `choice2`, or etc. None of the parameters will contain `|` characters. The client chooses an option using the [dialoguechoose](#dialoguechoose) message.
+This is one of three possible messages sent when the player interacts with an NPC with dialogue lines (possibly in response to the [interact](#interact) message). It indicates that the player can respond to the NPC with name `entity_name` with either `choice1`, `choice2`, or etc. None of the parameters will contain `|` characters. The client chooses an option using the [dialoguechoose](#dialoguechoose) message.
 
 ### dialogueend
 
-Parameters (1): `uuid`
+Parameters (1): `entity_name`
 
-This is one of three possible messages sent when the player interacts with an NPC with dialogue lines (possibly in response to the [interact](#interact) message). It indicates that the previous message the NPC with UUID `uuid` sent was its last line.
+This is one of three possible messages sent when the player interacts with an NPC with dialogue lines (possibly in response to the [interact](#interact) message). It indicates that the previous message the NPC with name `entity_name` sent was its last line.
 
 ### tag
 

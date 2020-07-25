@@ -29,12 +29,12 @@ EntityEventContext = namedtuple("EntityEventContext", [
 class Entity:
     """The Entity class encompasses things in the game that can move."""
 
-    def __init__(self, pos, velocity, facing, entity_uuid):
+    def __init__(self, pos, velocity, facing, name):
         """Initialize entity with information given."""
         self.pos = pos
         self.velocity = velocity
         self.facing = facing
-        self.uuid = entity_uuid
+        self.name = name
         self.blocks_movement = True
 
     def move(self, offset):
@@ -105,7 +105,7 @@ class Entity:
         """
         del is_to_client  # Unused
         return {
-            "uuid": self.uuid.hex,
+            "name": self.name,
             "entity_id": self.get_entity_id(),
             "pos": self.pos.to_json(),
             "velocity": self.velocity.to_json(),

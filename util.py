@@ -42,19 +42,19 @@ class Util:
         await ws.send("entities|"+entities_str)
 
     @staticmethod
-    async def send_dialogue(ws, uuid, dialogue_text):
+    async def send_dialogue(ws, entity_name, dialogue_text):
         """See the dialogue message under PROTOCOL.md for explanation."""
-        await ws.send(f"dialogue|{uuid.hex}|{dialogue_text}")
+        await ws.send(f"dialogue|{entity_name}|{dialogue_text}")
 
     @staticmethod
-    async def send_dialogue_choices(ws, uuid, lines):
+    async def send_dialogue_choices(ws, entity_name, lines):
         """See the dialoguechoice message under PROTOCOL.md for explanation."""
-        await ws.send(f"dialoguechoice|{uuid.hex}|{'|'.join(lines)}")
+        await ws.send(f"dialoguechoice|{entity_name}|{'|'.join(lines)}")
 
     @staticmethod
-    async def send_dialogue_end(ws, uuid):
+    async def send_dialogue_end(ws, entity_name):
         """See the dialogueend message under PROTOCOL.md for explanation."""
-        await ws.send(f"dialogueend|{uuid.hex}")
+        await ws.send(f"dialogueend|{entity_name}")
 
     @staticmethod
     async def send_tag(game, tagging_player, tagged_player):
