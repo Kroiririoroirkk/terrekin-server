@@ -1,5 +1,5 @@
 {
-  "version":"0.3.0",
+  "version":"0.4.0",
   "tiles":[
     [
       {"tile_id":"barrier"},
@@ -44,7 +44,7 @@
   ],
   "entities": [
     {
-      "uuid": "052b866108fc4648a59576336e9e913d",
+      "name": "butler",
       "entity_id": "stander",
       "pos": {"x": 64, "y": 32},
       "velocity": {"x": 0, "y": 0},
@@ -59,7 +59,7 @@
   "cutscenes": [
     {
       "scene_type": "move",
-      "uuid": "052b866108fc4648a59576336e9e913d",
+      "entity_name": "butler",
       "move_destination": {"x": 64, "y": 64},
       "move_duration": 1
     },
@@ -69,17 +69,17 @@
     },
     {
       "scene_type": "dialogue",
-      "uuid": "052b866108fc4648a59576336e9e913d",
+      "entity_name": "butler",
       "dialogue": "Hi!"
     },
     {
       "scene_type": "dialogue",
-      "uuid": "052b866108fc4648a59576336e9e913d",
+      "entity_name": "butler",
       "dialogue": "This is your house!"
     },
     {
       "scene_type": "move",
-      "uuid": "052b866108fc4648a59576336e9e913d",
+      "entity_name": "butler",
       "move_destination": {"x": 64, "y": 32},
       "move_duration": 1
     }
