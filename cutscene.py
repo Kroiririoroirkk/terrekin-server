@@ -91,7 +91,7 @@ class MoveScene(Cutscene):
     def __init__(self, cutscene_dict):
         """Set scene type and other properties."""
         super().__init__(cutscene_dict)
-        self.entity_name = cutscene_dict["name"]
+        self.entity_name = cutscene_dict["entity_name"]
         self.move_destination = Vec.from_json(
             cutscene_dict["move_destination"])
         self.move_duration = cutscene_dict["move_duration"]

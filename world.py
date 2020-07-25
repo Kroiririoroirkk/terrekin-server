@@ -75,7 +75,7 @@ class World:
     @staticmethod
     def from_json(world_dict):
         """Convert a dict representing a JSON object into a world."""
-        if world_dict["version"] != "0.3.0":
+        if world_dict["version"] != "0.4.0":
             raise ValueError
         tiles = []
         for row in world_dict["tiles"]:
@@ -124,7 +124,7 @@ class World:
             cutscene.to_json(True) for cutscene in self.cutscenes]
 
         return {
-            "version": "0.2.0",
+            "version": "0.3.0",
             "tiles": tiles_list,
             "entities": entity_list,
             "spawn_pos": spawn_pos_obj,
@@ -158,7 +158,7 @@ class World:
             for patch_id, patch in self.patches.items()}
 
         return {
-            "version": "0.3.0",
+            "version": "0.4.0",
             "tiles": tiles_list,
             "entities": entity_list,
             "spawn_points": spawn_point_list,

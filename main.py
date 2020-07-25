@@ -175,8 +175,8 @@ async def parseMessage(message, username, ws):
         if running_game.player_in_battle(username):
             return
         parts = message.split("|")
-        entity_uuid = uuid.UUID(hex=parts[1])
-        entity_speaking_to = world.get_entity(entity_uuid)
+        entity_name = parts[1]
+        entity_speaking_to = world.get_entity(entity_name)
         try:
             await entity_speaking_to.on_dialogue_choose(EntityEventContext(
                 game=running_game,
