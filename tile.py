@@ -455,13 +455,13 @@ class LampNightstand(TilePlus):
         self.blocks_movement = True
 
 
-@register_tile("desk")
-class Desk(Tile):
+@register_tile_plus("desk", GroundData)
+class Desk(TilePlus):
     """Class for the desk tile."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialize with the ability to block player movement."""
-        super().__init__()
+        super().__init__(data)
         self.blocks_movement = True
 
 
