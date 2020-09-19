@@ -485,9 +485,14 @@ class HungUpClothes(Tile):
         self.blocks_movement = True
 
 
-@register_tile("pile_of_clothes")
-class PileOfClothes(Tile):
+@register_tile_plus("pile_of_clothes", GroundData)
+class PileOfClothes(TilePlus):
     """Class for the pile of clothes tile."""
+
+    def __init__(self, data):
+        """Initialize with the ability to block player movement."""
+        super().__init__(data)
+        self.blocks_movement = True
 
 
 @register_tile_plus("player_roof", GroundData)
